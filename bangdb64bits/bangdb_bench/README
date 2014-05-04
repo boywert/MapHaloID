@@ -1,0 +1,31 @@
+**********************************************************************************
+**********************************************************************************
+	---------	======  ======   || 	  ======   ======  ====== 
+	|	|	  ||    |    |   ||	  |	  ||	     ||
+	|----	|         ||    |    |   ||	  |====	  |	     ||		
+	|   |	| 	  ||    |  \\|   ||	  |	  ||	     ||
+	---------	======  ====\\   ======	  ======   ======    ||
+
+	||===\        /\ 	||\    ||   /=====\   ||====\    ||===\
+	||   ||	     //\\	|| \   ||   |         ||    ||   ||   ||
+	||===       //  \\	||  \  ||   |   ====  ||    ||	 ||=== 
+	||   ||	   //====\\	||   \ ||   |      /  ||    ||   ||   ||
+	||===/    //      \\	||    \||   \=====/   ||====/    ||===/
+
+***********************************************************************************
+***********************************************************************************
+
+This is simple bench file to test the bangdb.
+To run this, simply install the bangdb (pls see the install file of the bangdb)
+Then run the bench file included in this dir
+
+This may also be helpful in understanding how one can code for the bangdb.
+
+Please note that the same client is good for bangdb embedded or server, we only 
+need to link against the right library
+
+Please go to www.iqlect.com\developer.php to get more info on BangDB and help
+related to development of app using BangDB
+
+***********************************************************************************
+***********************************************************************************

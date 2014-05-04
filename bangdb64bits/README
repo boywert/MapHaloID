@@ -1,0 +1,91 @@
+****************************************************************************************
+****************************************************************************************
+	---------	======  ======   || 	  ======   ======  ====== 
+	|	|	  ||    |    |   ||	  |	  ||	     ||
+	|----	|         ||    |    |   ||	  |====	  |	     ||		
+	|   |	| 	  ||    |  \\|   ||	  |	  ||	     ||
+	---------	======  ====\\   ======	  ======   ======    ||
+
+	||===\        /\ 	||\    ||   /=====\   ||====\    ||===\
+	||   ||	     //\\	|| \   ||   |         ||    ||   ||   ||
+	||===       //  \\	||  \  ||   |   ====  ||    ||	 ||=== 
+	||   ||	   //====\\	||   \ ||   |      /  ||    ||   ||   ||
+	||===/    //      \\	||    \||   \=====/   ||====/    ||===/
+
+****************************************************************************************
+****************************************************************************************
+
+Release Note:
+-------------
+
+This is version 1.4 of the BangDB Embedded Flavor. This is a stable version and 
+is ready to be used in production or any environment as required.
+
+Following additions have been made to this release compared to its earlier version;
+
+a. DB is now much more memory efficient, runs within the supplied memory budget 
+   under all condtions
+b. Addition of shared log feature. Tables can share the same log (WAL) resulting 
+   in saving huge memory and also less disk seeks
+c. Shared and Private log available as option to the user with Shared being the 
+   default
+d. The background workers are much lighter and efficient for log and buffer pool
+e. DB now returns error when unable to create new table or allocate resources, 
+   earlier it used to quit
+f. Improvement in prefetch cache, much less memory ovrhead, better prediction for 
+   page prefetching
+g. Overall performance improvement, espeically for reads
+h. Few bug fixes
+
+Please check the site (www.iqlect.com) for more information on BangDB and this release
+
+Please note that this version is not backward compatible hence the previous version(s) 
+of BangDB should be uninstalled or removed if earlier installed
+
+The tar file (bangdb-[platform]-[32/64]-[lang]-XX-XX.tar.gz) contains following;
+a. libbangdb.so.1.4
+b. README
+c. bangdb.config
+d. include/headers
+e. install-bangdb.sh
+f. uninstall-bangdb.sh
+g. bangdb_bench - dir which contains few test/bench cases
+
+uncompress the file by running;
+tar -xzf bangdb-[platform]-[32/64]-[lang]-XX-XX.tar.gz
+
+cd to the dir into which the files have been copied
+
+To install bangdb, run
+----------------------
+1. sudo bash install-bangdb.sh
+2. it will ask for linux user name [for most of the cases your user name is fine, 
+   but in case you may want to run it from different user please provide that name]
+
+To uninstall bandgdb, run
+-------------------------
+1. sudo bash uninstall-bangdb.sh
+2. you may delete the data file from the dir that you created during installation as 
+   needed
+
+Some info - General
+--------------------
+1. The lib is copied to /usr/local/lib and the links are created in the same dir
+2. If unable to link from the app then run 
+	a. sudo ldconfig -l /usr/local/lib/libbangdb.so.1
+	b. LD_LIBRARY_PATH=/usr/local/lib
+	   export LD_LIBRARY_PATH
+3. The config file (bangdb.config) should be kept in the app directory , or the path should 
+   be supplied during db creationg as a parameter
+4. The headers are copied to usr/local/include/bangdb. To include headers in a file use 
+   #include <bangdb/database.h>, that's all (after linking to the bangdb)
+5. The installation as mentioned above is not necessary, one can keep the lib and headers 
+   in the known location and link directly
+
+Please see the developer section at www.iqlect.com/developer.php or product whitepaper 
+for more information.
+
+Enjoy!
+
+****************************************************************************************
+****************************************************************************************
