@@ -211,8 +211,8 @@ void readmfofsnap(int filenr)
 	      fread (&(pos[0]), 3, sizeof(float),fp);
 	      for(i=0;i<3;i++)
 		{
-		  cmpos[i] += bpos[ipart*3+i];
-		  cmpos[i] += pos[i]
+		  // cmpos[i] += bpos[ipart*3+i];
+		  cmpos[i] += pos[i];
 		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
@@ -226,7 +226,7 @@ void readmfofsnap(int filenr)
 	      for(i=0;i<3;i++)
 		{
 		  // cmvel[i] += bvel[ipart*3+i];
-		  cmvel[i] += vel[i]
+		  cmvel[i] += vel[i];
 		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
