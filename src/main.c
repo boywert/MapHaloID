@@ -57,8 +57,8 @@ struct AHFhalo {
   float   Phi0;
   float   cNFW;
 };
-
-uint64_t read_clueAHFhalos( struct halostruct *halo)
+struct halostruct *AHFhalo,*FOFhalo;
+uint64_t read_clueAHFhalos()
 {
   char strbuffer[2048];
   struct AHFhalo ahfhalo;
@@ -69,7 +69,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   int maxhalo;
   maxhalo = stepmaxhalo;
 
-  halo = realloc(halo,maxhalo*sizeof(struct halostruct));
+  AHFhalo = realloc(AHFhalo,maxhalo*sizeof(struct halostruct));
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
@@ -122,20 +122,20 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
 	     &(ahfhalo.Phi0),
 	     &(ahfhalo.cNFW) 
 	     );
-      halo[currentHalo].host = ahfhalo.hostHalo;
-      halo[currentHalo].nparts = ahfhalo.npart;
-      halo[currentHalo].pos[0] = ahfhalo.Xc;
-      halo[currentHalo].pos[1] = ahfhalo.Yc;
-      halo[currentHalo].pos[2] = ahfhalo.Zc;
-      halo[currentHalo].vel[0] = ahfhalo.VXc;
-      halo[currentHalo].vel[1] = ahfhalo.VYc;
-      halo[currentHalo].vel[2] = ahfhalo.VZc;
-      halo[currentHalo].nextid = -1;
+      AHFhalo[currentHalo].host = ahfhalo.hostHalo;
+      AHFhalo[currentHalo].nparts = ahfhalo.npart;
+      AHFhalo[currentHalo].pos[0] = ahfhalo.Xc;
+      AHFhalo[currentHalo].pos[1] = ahfhalo.Yc;
+      AHFhalo[currentHalo].pos[2] = ahfhalo.Zc;
+      AHFhalo[currentHalo].vel[0] = ahfhalo.VXc;
+      AHFhalo[currentHalo].vel[1] = ahfhalo.VYc;
+      AHFhalo[currentHalo].vel[2] = ahfhalo.VZc;
+      AHFhalo[currentHalo].nextid = -1;
       printf("%d %f %f %f\n",currentHalo,halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
-	  halo = realloc(halo,sizeof(struct halostruct)*maxhalo);
+	  FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*maxhalo);
 	}
       currentHalo++;
     }
@@ -149,7 +149,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
 
 
 
-uint64_t readmfofsnap(int filenr, struct halostruct *halo)
+uint64_t readmfofsnap(int filenr, struct halostruct *FOFhalo)
 {
   char folder[1024];
   //int filenr=138;
@@ -169,7 +169,7 @@ uint64_t readmfofsnap(int filenr, struct halostruct *halo)
   // struct halostruct *halo;
   long long currentHalo = 0;
   
-  halo = realloc(halo,0);
+  FOFhalo = realloc(FOFhalo,0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
   
   
@@ -248,15 +248,15 @@ uint64_t readmfofsnap(int filenr, struct halostruct *halo)
 	      cmpos[i] /= (double)nparts;
 	      
 	    }
-	  halo[currentHalo].host = 0;
-	  halo[currentHalo].nparts = nparts;
-	  halo[currentHalo].pos[0] = cmpos[0]*boxsize;
-	  halo[currentHalo].pos[1] = cmpos[1]*boxsize;
-	  halo[currentHalo].pos[2] = cmpos[2]*boxsize;
-	  halo[currentHalo].vel[0] = cmvel[0];
-	  halo[currentHalo].vel[1] = cmvel[1];
-	  halo[currentHalo].vel[2] = cmvel[2];
-	  halo[currentHalo].nextid = -1;
+	  FOFhalo[currentHalo].host = 0;
+	  FOFhalo[currentHalo].nparts = nparts;
+	  FOFhalo[currentHalo].pos[0] = cmpos[0]*boxsize;
+	  FOFhalo[currentHalo].pos[1] = cmpos[1]*boxsize;
+	  FOFhalo[currentHalo].pos[2] = cmpos[2]*boxsize;
+	  FOFhalo[currentHalo].vel[0] = cmvel[0];
+	  FOFhalo[currentHalo].vel[1] = cmvel[1];
+	  FOFhalo[currentHalo].vel[2] = cmvel[2];
+	  FOFhalo[currentHalo].nextid = -1;
 	  
 
 	  free(bpos);
@@ -277,7 +277,7 @@ int main ()
   int i;
   int nsubperdim = 128;
   int totalsub;
-  struct halostruct *FOFhalo,*AHFhalo;
+  //   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
 
   totalsub = nsubperdim*nsubperdim*nsubperdim;
