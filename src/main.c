@@ -75,7 +75,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
   currentHalo = 0;
-  while(fgets(strbuffer,2048,fp) != EOF)
+  while(fgets(strbuffer,2048,fp)!=NULL)
     {
       //printf("iHalo = %llu\n",iHalo);
       sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %d %g %g %g %g %g %g",
