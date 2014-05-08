@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+const float boxsize = 64000; 
 struct halostruct {
   uint64_t host;
   float mass;
@@ -57,10 +58,10 @@ struct AHFhalo {
   float   cNFW;
 };
 
-uint64_t read_clueAHFhalos()
+uint64_t read_clueAHFhalos( struct halostruct *halo)
 {
   char strbuffer[2048];
-  struct AHFhalo ahfhalo;
+  //struct AHFhalo ahfhalo;
   char filename[2048];
   int currentHalo = 0;
   FILE *fp;
@@ -148,7 +149,7 @@ uint64_t read_clueAHFhalos()
 
 
 
-uint64_t readmfofsnap(int filenr)
+uint64_t readmfofsnap(int filenr, struct halostruct *halo)
 {
   char folder[1024];
   //int filenr=138;
@@ -165,7 +166,7 @@ uint64_t readmfofsnap(int filenr)
   // int firstfile,lastfile;
   int i;
   uint64_t totalhalos = 0;
-  struct halostruct *halo;
+  //struct halostruct *halo;
   long long currentHalo = 0;
   
   halo = malloc(0);
@@ -249,9 +250,9 @@ uint64_t readmfofsnap(int filenr)
 	    }
 	  halo[currentHalo].host = 0;
 	  halo[currentHalo].nparts = nparts;
-	  halo[currentHalo].pos[0] = cmpos[0];
-	  halo[currentHalo].pos[1] = cmpos[1];
-	  halo[currentHalo].pos[2] = cmpos[2];
+	  halo[currentHalo].pos[0] = cmpos[0]*boxsize;
+	  halo[currentHalo].pos[1] = cmpos[1]*boxsize;
+	  halo[currentHalo].pos[2] = cmpos[2]*boxsize;
 	  halo[currentHalo].vel[0] = cmvel[0];
 	  halo[currentHalo].vel[1] = cmvel[1];
 	  halo[currentHalo].vel[2] = cmvel[2];
@@ -269,10 +270,51 @@ uint64_t readmfofsnap(int filenr)
 
 int main ()
 {
-  int filenr=138;
-  uint64_t nhaloFOF,nhaloAHF;
-  nhaloFOF = readmfofsnap(filenr);
-  nhaloAHF = read_clueAHFhalos();
+  int filenr=88;
+  uint64_t ihalo,nhaloFOF,nhaloAHF;
+  int *hocFOF,*hocAHF;
+  int xb,yb,zb;
+  int i;
+  int nsubperdim = 128;
+  int totalsub;
+  struct halostruct *FOFhalo,*AHFhalo;
+  float subsize;
 
+  totalsub = pow(128,3);
+  subsize = boxsize/nsubperdim;
+
+  hocFOF = malloc(sizeof(int)*totalsub);
+  hocAHF = malloc(sizeof(int)*totalsub);
+
+
+  nhaloFOF = readmfofsnap(filenr,FOFhalo);
+  nhaloAHF = read_clueAHFhalos(AHFhalo);
+  for(i=0;i<totalsub;i++)
+    {
+      FOFhalo[i] = -1;
+      AHFhalo[i] = -1;
+    }
+  for(ihalo=0;ihalo<nhaloFOF;ihalo++)
+    {
+      xb = FOFhalo[ihalo].pos[0]/subsize;
+      yb = FOFhalo[ihalo].pos[1]/subsize;
+      zb = FOFhalo[ihalo].pos[2]/subsize;
+      
+      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+      FOFhalo[ihalo].nextid = hocFOF[block];
+      hocFOF[block] = ihalo;
+    }
+  for(ihalo=0;ihalo<nhaloAHF;ihalo++)
+    {
+      xb = AHFhalo[ihalo].pos[0]/subsize;
+      yb = AHFhalo[ihalo].pos[1]/subsize;
+      zb = AHFhalo[ihalo].pos[2]/subsize;
+      
+      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+      AHFhalo[ihalo].nextid = hocAHF[block];
+      hocAHF[block] = ihalo;      
+    }
+  free(hocFOF);
+  free(hocAHF);
   return 0;
 }
