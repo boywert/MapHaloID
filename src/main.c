@@ -287,22 +287,23 @@ int main ()
   hocAHF = malloc(sizeof(int)*totalsub);
 
 
-  nhaloFOF = readmfofsnap(filenr,FOFhalo);
+
   for(i=0;i<totalsub;i++)
     {
       hocFOF[i] = -1;
       hocAHF[i] = -1;
     }
-  for(ihalo=0;ihalo<nhaloFOF;ihalo++)
-    {
-      xb = FOFhalo[ihalo].pos[0]/subsize;
-      yb = FOFhalo[ihalo].pos[1]/subsize;
-      zb = FOFhalo[ihalo].pos[2]/subsize;
+  /* nhaloFOF = readmfofsnap(filenr,FOFhalo); */
+  /* for(ihalo=0;ihalo<nhaloFOF;ihalo++) */
+  /*   { */
+  /*     xb = FOFhalo[ihalo].pos[0]/subsize; */
+  /*     yb = FOFhalo[ihalo].pos[1]/subsize; */
+  /*     zb = FOFhalo[ihalo].pos[2]/subsize; */
       
-      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
-      FOFhalo[ihalo].nextid = hocFOF[block];
-      hocFOF[block] = ihalo;
-    }
+  /*     block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb; */
+  /*     FOFhalo[ihalo].nextid = hocFOF[block]; */
+  /*     hocFOF[block] = ihalo; */
+  /*   } */
   nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
