@@ -204,8 +204,8 @@ void readmfofsnap(int filenr)
 	  bvel = malloc(nparts*sizeof(float*));
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
-	      bpos[i] = malloc(sizeof(float)*3);
-	      bvel[i] = malloc(sizeof(float)*3);
+	      bpos[ipart] = malloc(sizeof(float)*3);
+	      bvel[ipart] = malloc(sizeof(float)*3);
 	    }
 
 
