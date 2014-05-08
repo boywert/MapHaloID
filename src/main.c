@@ -123,15 +123,15 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
 	     &(ahfhalo.Phi0),
 	     &(ahfhalo.cNFW) 
 	     );
-      halo[currentHalo]->host = ahfhalo.hostHalo;
-      halo[currentHalo]->nparts = ahfhalo.npart;
-      halo[currentHalo]->pos[0] = ahfhalo.Xc;
-      halo[currentHalo]->pos[1] = ahfhalo.Yc;
-      halo[currentHalo]->pos[2] = ahfhalo.Zc;
-      halo[currentHalo]->vel[0] = ahfhalo.VXc;
-      halo[currentHalo]->vel[1] = ahfhalo.VYc;
-      halo[currentHalo]->vel[2] = ahfhalo.VZc;
-      halo[currentHalo]->nextid = -1;
+      halo[currentHalo].host = ahfhalo.hostHalo;
+      halo[currentHalo].nparts = ahfhalo.npart;
+      halo[currentHalo].pos[0] = ahfhalo.Xc;
+      halo[currentHalo].pos[1] = ahfhalo.Yc;
+      halo[currentHalo].pos[2] = ahfhalo.Zc;
+      halo[currentHalo].vel[0] = ahfhalo.VXc;
+      halo[currentHalo].vel[1] = ahfhalo.VYc;
+      halo[currentHalo].vel[2] = ahfhalo.VZc;
+      halo[currentHalo].nextid = -1;
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
@@ -248,15 +248,15 @@ uint64_t readmfofsnap(int filenr, struct halostruct *halo)
 	      cmpos[i] /= (double)nparts;
 	      
 	    }
-	  halo[currentHalo]->host = 0;
-	  halo[currentHalo]->nparts = nparts;
-	  halo[currentHalo]->pos[0] = cmpos[0]*boxsize;
-	  halo[currentHalo]->pos[1] = cmpos[1]*boxsize;
-	  halo[currentHalo]->pos[2] = cmpos[2]*boxsize;
-	  halo[currentHalo]->vel[0] = cmvel[0];
-	  halo[currentHalo]->vel[1] = cmvel[1];
-	  halo[currentHalo]->vel[2] = cmvel[2];
-	  halo[currentHalo]->nextid = -1;
+	  halo[currentHalo].host = 0;
+	  halo[currentHalo].nparts = nparts;
+	  halo[currentHalo].pos[0] = cmpos[0]*boxsize;
+	  halo[currentHalo].pos[1] = cmpos[1]*boxsize;
+	  halo[currentHalo].pos[2] = cmpos[2]*boxsize;
+	  halo[currentHalo].vel[0] = cmvel[0];
+	  halo[currentHalo].vel[1] = cmvel[1];
+	  halo[currentHalo].vel[2] = cmvel[2];
+	  halo[currentHalo].nextid = -1;
 	  
 
 	  free(bpos);
