@@ -135,7 +135,9 @@ void read_clueAHFhalos()
 	}
       currentHalo++;
     }
+  
   fclose(fp);
+  halo = realloc(halo,sizeof(struct AHFhalo)*currentHalo);
   free(halo);
       
 }
