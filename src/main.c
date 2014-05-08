@@ -70,7 +70,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   maxhalo = stepmaxhalo;
   //struct halostruct *halo;
 
-  halo = malloc(maxhalo*sizeof(struct halostruct));
+  halo = realloc(halo,maxhalo*sizeof(struct halostruct));
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
@@ -170,7 +170,7 @@ uint64_t readmfofsnap(int filenr, struct halostruct *halo)
   // struct halostruct *halo;
   long long currentHalo = 0;
   
-  halo = malloc(0);
+  halo = realloc(halo,0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
   
   
@@ -305,13 +305,14 @@ int main ()
   /*     FOFhalo[ihalo].nextid = hocFOF[block]; */
   /*     hocFOF[block] = ihalo; */
   /*   } */
+  AHFhalo = malloc(0);
   nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
       // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
-      xb = 0; // AHFhalo[ihalo].pos[0]/subsize;
-      yb = 0; // AHFhalo[ihalo].pos[1]/subsize;
-      zb = 0; // AHFhalo[ihalo].pos[2]/subsize;
+      xb = AHFhalo[ihalo].pos[0]/subsize;
+      yb = AHFhalo[ihalo].pos[1]/subsize;
+      zb = AHFhalo[ihalo].pos[2]/subsize;
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
 
