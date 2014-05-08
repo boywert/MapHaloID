@@ -305,8 +305,8 @@ int main ()
   /*     FOFhalo[ihalo].nextid = hocFOF[block]; */
   /*     hocFOF[block] = ihalo; */
   /*   } */
-  AHFhalo = malloc(0);
-  nhaloAHF = read_clueAHFhalos(AHFhalo);
+  AHFhalo = malloc(sizeof(struct halostruct));
+  nhaloAHF = read_clueAHFhalos(&(AHFhalo[0]));
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
       // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
