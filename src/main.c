@@ -316,7 +316,7 @@ int main ()
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
 
-      printf("%llu  %d %d %d \n",ihalo,xb,yb,zb);
+      printf("%llu/%llu  %d %d %d \n",ihalo,nhalos,xb,yb,zb);
       // AHFhalo[ihalo].nextid = hocAHF[block];
       // hocAHF[block] = ihalo;      
     }
