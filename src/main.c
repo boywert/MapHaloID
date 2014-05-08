@@ -3,10 +3,12 @@
 #include <stdint.h>
 
 struct halostruct {
-  long long unsigned host;
+  uint64_t host;
+  float mass;
+  int nparts;
   float pos[3];
   float vel[3];
-  long long nextid;
+  int64_t nextid;
 };
 
 struct AHFhalo {
@@ -121,6 +123,7 @@ void read_clueAHFhalos()
 	     &(ahfhalo.cNFW) 
 	     );
       halo[currentHalo].host = ahfhalo.hostHalo;
+      halo[currentHalo].nparts = ahfhalo.npart;
       halo[currentHalo].pos[0] = ahfhalo.Xc;
       halo[currentHalo].pos[1] = ahfhalo.Yc;
       halo[currentHalo].pos[2] = ahfhalo.Zc;
@@ -150,16 +153,25 @@ void readmfofsnap(int filenr)
   char folder[1024];
   //int filenr=138;
   char massfname[1024],structfname[1024];
-  double pos[3],vel[3];
+  // float  pos[3],vel[3];
+  float **bpos,**bvel;
+  double cmpos[3],cmvel[3];
   FILE *fp;
   int ihalo,jhalo,ifile;
   int skip,nhalos,ipart,nparts;
   float mass;
-  long long id;
+  // long long id;
   int nfiles = 4096;
-  int firstfile,lastfile;
+  // int firstfile,lastfile;
+  int i;
+  uint64_t totalhalos = 0;
+  struct halostruct *halo;
+  long long currentHalo = 0;
+  
+  halo = malloc(0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
-
+  
+  
   for(ifile=1;ifile<=nfiles;ifile++)
     {
       printf("READING %d\n",ifile);
@@ -172,7 +184,8 @@ void readmfofsnap(int filenr)
       fseek(fp, sizeof(int), SEEK_CUR);
       fread (&nhalos,1,sizeof(int),fp);
       fseek(fp, sizeof(int), SEEK_CUR);
-
+      totalhalos += nhalos;
+      halo = realloc(halo,totalhalos*sizeof(struct halostruct));
 
       for(ihalo=0;ihalo<nhalos;ihalo++)
 	{
@@ -181,18 +194,43 @@ void readmfofsnap(int filenr)
 	  fseek(fp, sizeof(int), SEEK_CUR);
 
 
-	  fseek(fp, sizeof(int), SEEK_CUR);
+
+	  for(i=0;i<3;i++)
+	    {
+	      cmvel[i] = 0.;
+	      cmpos[i] = 0.;
+	    }
+	  bpos = malloc(nparts*sizeof(float*));
+	  bvel = malloc(nparts*sizeof(float*));
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
-	      fread (&(pos[0]), 3, sizeof(float),fp);
+	      bpos[i] = malloc(sizeof(float)*3);
+	      bvel[i] = malloc(sizeof(float)*3);
+	    }
+
+
+	  fseek(fp, sizeof(int), SEEK_CUR);
+	  fread (&(bpos), 3*nparts, sizeof(float),fp);
+	  for(ipart=0;ipart<nparts;ipart++)
+	    {
+	      //fread (&(pos[0]), 3, sizeof(float),fp);
+	      for(i=0;i<3;i++)
+		{
+		  cmpos[i] += bpos[ipart][i];
+		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
 
 
 	  fseek(fp, sizeof(int), SEEK_CUR);
+	  fread (&(bvel), 3*nparts, sizeof(float),fp);
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
-	      fread (&(vel[0]), 3, sizeof(float),fp);
+	      //fread (&(vel[0]), 3, sizeof(float),fp);
+	      for(i=0;i<3;i++)
+		{
+		  cmvel[i] += bvel[ipart][i];
+		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
 
@@ -206,7 +244,29 @@ void readmfofsnap(int filenr)
 	  /* 	  fread (&id, 1, sizeof(long long),fp); */
 	  /* 	} */
 	  fseek(fp, sizeof(int), SEEK_CUR);
-
+	  for(i=0;i<3;i++)
+	    {
+	      cmvel[i] /= (double)nparts;
+	      cmpos[i] /= (double)nparts;
+	      
+	    }
+	  halo[currentHalo].host = 0;
+	  halo[currentHalo].nparts = nparts;
+	  halo[currentHalo].pos[0] = cmpos[0];
+	  halo[currentHalo].pos[1] = cmpos[1];
+	  halo[currentHalo].pos[2] = cmpos[2];
+	  halo[currentHalo].vel[0] = cmvel[0];
+	  halo[currentHalo].vel[1] = cmvel[1];
+	  halo[currentHalo].vel[2] = cmvel[2];
+	  halo[currentHalo].nextid = -1;	  
+	  for(ipart=0;ipart<nparts;ipart++)
+	    {
+	      free(bpos[ipart]);
+	      free(bvel[ipart]);
+	    }
+	  free(bpos);
+	  free(bvel);
+	  currentHalo++;
 	}
       fclose(fp);
     }
@@ -216,8 +276,8 @@ int main ()
 {
   int filenr=138;
 
-  //readmfofsnap(filenr);
-  read_clueAHFhalos();
+  readmfofsnap(filenr);
+  //read_clueAHFhalos();
 
   return 0;
 }
