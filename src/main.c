@@ -142,7 +142,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
     }
   
   fclose(fp);
-  printf("size: %d\n",sizeof(struct halostruct));
+  printf("size: %d\n",(int) sizeof(struct halostruct));
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
   return (uint64_t)currentHalo;
 }
