@@ -68,8 +68,8 @@ void read_clueAHFhalos()
   while(fgets(strbuffer,2048,fp))
     {
       //printf("iHalo = %llu\n",iHalo);
-      sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g",
-	     &(HaloTable[currentHalo].ID),
+      sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %d %g %g %g %g %g %g",
+	     &(ahfhalo.ID),
 	     &(ahfhalo.hostHalo),
 	     &(ahfhalo.numSubStruct),
 	     &(ahfhalo.Mvir),
