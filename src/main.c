@@ -57,4 +57,5 @@ void main()
       fseek(fp, sizeof(int), SEEK_CUR);
 
     }
+  return 0;
 }
