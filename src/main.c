@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-const float boxsize = 64000; 
+const float boxsize = 64000.; 
 struct halostruct {
   uint64_t host;
   float mass;
@@ -63,7 +63,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   char strbuffer[2048];
   struct AHFhalo ahfhalo;
   char filename[2048];
-  int currentHalo = 0;
+  int currentHalo ;
   FILE *fp;
   int stepmaxhalo = 1000000;
   int maxhalo;
@@ -74,7 +74,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
-  
+  currentHalo = 0;
   while(fgets(strbuffer,2048,fp))
     {
       //printf("iHalo = %llu\n",iHalo);
@@ -280,7 +280,7 @@ int main ()
   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
 
-  totalsub = pow(128,3);
+  totalsub = nsubperdim*nsubperdim*nsubperdim;
   subsize = boxsize/nsubperdim;
 
   hocFOF = malloc(sizeof(int)*totalsub);
@@ -308,14 +308,14 @@ int main ()
   nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
-      // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
+      printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
       xb = AHFhalo[ihalo].pos[0]/subsize;
       yb = AHFhalo[ihalo].pos[1]/subsize;
       zb = AHFhalo[ihalo].pos[2]/subsize;
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
 
-      printf("%llu/%llu  %d %d %d \n",ihalo,nhaloAHF,xb,yb,zb);
+      // printf("%llu/%llu  %d %d %d \n",ihalo,nhaloAHF,xb,yb,zb);
       // AHFhalo[ihalo].nextid = hocAHF[block];
       // hocAHF[block] = ihalo;      
     }
