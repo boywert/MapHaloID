@@ -288,7 +288,6 @@ int main ()
 
 
   nhaloFOF = readmfofsnap(filenr,FOFhalo);
-  nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(i=0;i<totalsub;i++)
     {
       hocFOF[i] = -1;
@@ -304,6 +303,7 @@ int main ()
       FOFhalo[ihalo].nextid = hocFOF[block];
       hocFOF[block] = ihalo;
     }
+  nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
       xb = AHFhalo[ihalo].pos[0]/subsize;
