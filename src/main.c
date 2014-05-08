@@ -315,9 +315,9 @@ int main ()
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
 
-      // printf("%llu %d\n",ihalo,block);
-      AHFhalo[ihalo].nextid = hocAHF[block];
-      hocAHF[block] = ihalo;      
+      printf("%llu\n",ihalo);
+      // AHFhalo[ihalo].nextid = hocAHF[block];
+      // hocAHF[block] = ihalo;      
     }
   free(hocFOF);
   free(hocAHF);
