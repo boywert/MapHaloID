@@ -134,7 +134,7 @@ void read_clueAHFhalos()
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
-	  halo = realloc(halo,sizeof(struct AHFhalo)*maxhalo);
+	  halo = realloc(halo,sizeof(struct halostruct)*maxhalo);
 	}
       currentHalo++;
     }
@@ -184,7 +184,9 @@ void readmfofsnap(int filenr)
       fseek(fp, sizeof(int), SEEK_CUR);
       fread (&nhalos,1,sizeof(int),fp);
       fseek(fp, sizeof(int), SEEK_CUR);
+
       totalhalos += nhalos;
+      printf("halo: %llu\n",totalhalos);
       halo = realloc(halo,totalhalos*sizeof(struct halostruct));
 
       for(ihalo=0;ihalo<nhalos;ihalo++)
@@ -192,8 +194,6 @@ void readmfofsnap(int filenr)
 	  fseek(fp, sizeof(int), SEEK_CUR);
 	  fread (&nparts,1,sizeof(int),fp);
 	  fseek(fp, sizeof(int), SEEK_CUR);
-
-
 
 	  for(i=0;i<3;i++)
 	    {
@@ -258,7 +258,8 @@ void readmfofsnap(int filenr)
 	  halo[currentHalo].vel[0] = cmvel[0];
 	  halo[currentHalo].vel[1] = cmvel[1];
 	  halo[currentHalo].vel[2] = cmvel[2];
-	  halo[currentHalo].nextid = -1;	  
+	  halo[currentHalo].nextid = -1;
+	  
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
 	      free(bpos[ipart]);
