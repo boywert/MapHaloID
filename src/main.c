@@ -57,7 +57,7 @@ struct AHFhalo {
   float   cNFW;
 };
 
-void read_clueAHFhalos()
+uint64_t read_clueAHFhalos()
 {
   char strbuffer[2048];
   struct AHFhalo ahfhalo;
@@ -142,13 +142,13 @@ void read_clueAHFhalos()
   fclose(fp);
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
   free(halo);
-      
+  return currentHalo;
 }
 
 
 
 
-void readmfofsnap(int filenr)
+uint64_t readmfofsnap(int filenr)
 {
   char folder[1024];
   //int filenr=138;
@@ -264,14 +264,15 @@ void readmfofsnap(int filenr)
 	}
       fclose(fp);
     }
+  return totalhalos;
 }
 
 int main ()
 {
   int filenr=138;
-
-  readmfofsnap(filenr);
-  //read_clueAHFhalos();
+  uint64_t nhaloFOF,nhaloAHF;
+  nhaloFOF = readmfofsnap(filenr);
+  nhaloAHF = read_clueAHFhalos();
 
   return 0;
 }
