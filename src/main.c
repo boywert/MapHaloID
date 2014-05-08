@@ -308,14 +308,14 @@ int main ()
   nhaloAHF = read_clueAHFhalos();
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
-      printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
+      // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
       xb = AHFhalo[ihalo].pos[0]/subsize;
       yb = AHFhalo[ihalo].pos[1]/subsize;
       zb = AHFhalo[ihalo].pos[2]/subsize;
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
 
-      // printf("%llu/%llu  %d %d %d \n",ihalo,nhaloAHF,xb,yb,zb);
+      printf("%llu/%llu  %d: %d %d %d \n",ihalo,nhaloAHF,block,xb,yb,zb);
       // AHFhalo[ihalo].nextid = hocAHF[block];
       // hocAHF[block] = ihalo;      
     }
