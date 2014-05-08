@@ -71,7 +71,7 @@ int main ()
 {
   int filenr=138;
 
-  readmfof(filenr);
+  readmfofsnap(filenr);
 
   return 0;
 }
