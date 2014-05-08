@@ -132,7 +132,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
       halo[currentHalo].vel[1] = ahfhalo.VYc;
       halo[currentHalo].vel[2] = ahfhalo.VZc;
       halo[currentHalo].nextid = -1;
-      printf("%f %f %f\n",halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
+      // printf("%f %f %f\n",halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
@@ -314,8 +314,8 @@ int main ()
       zb = AHFhalo[ihalo].pos[2]/subsize;
       
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
-      AHFhalo[ihalo].nextid = hocAHF[block];
-      hocAHF[block] = ihalo;      
+      // AHFhalo[ihalo].nextid = hocAHF[block];
+      // hocAHF[block] = ihalo;      
     }
   free(hocFOF);
   free(hocAHF);
