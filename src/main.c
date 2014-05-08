@@ -1,61 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+void readmfofsnap(int filenr)
 {
   char folder[1024];
-  int filenr=138;
+  //int filenr=138;
   char massfname[1024],structfname[1024];
   double pos[3],vel[3];
   FILE *fp;
-  int ihalo,jhalo;
+  int ihalo,jhalo,ifile;
   int skip,nhalos,ipart,nparts;
   float mass;
   long long id;
-  sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_00138/fofres/halos");
-  sprintf(structfname,"%s/halos_strct_%05d",folder,filenr);
-  fp = fopen(structfname,"rb");
+  int nfiles = 4096;
   
-  /* read nHalos */
+  sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
 
-  fseek(fp, sizeof(int), SEEK_CUR);
-  fread (&nhalos,1,sizeof(int),fp);
-  fseek(fp, sizeof(int), SEEK_CUR);
-
-
-  for(ihalo=0;ihalo<nhalos;ihalo++)
+  for(ifile=1;ifile<=nfiles;ifile++)
     {
+      sprintf(structfname,"%s/halos_strct_%05d",folder,ifile);
+      fp = fopen(structfname,"rb");
+  
+  
+      /* read nHalos */
+
       fseek(fp, sizeof(int), SEEK_CUR);
-      fread (&nparts,1,sizeof(int),fp);
+      fread (&nhalos,1,sizeof(int),fp);
       fseek(fp, sizeof(int), SEEK_CUR);
 
 
-      fseek(fp, sizeof(int), SEEK_CUR);
-      for(ipart=0;ipart<nparts;ipart++)
+      for(ihalo=0;ihalo<nhalos;ihalo++)
 	{
-	  fread (&(pos[0]), 3, sizeof(float),fp);
+	  fseek(fp, sizeof(int), SEEK_CUR);
+	  fread (&nparts,1,sizeof(int),fp);
+	  fseek(fp, sizeof(int), SEEK_CUR);
+
+
+	  fseek(fp, sizeof(int), SEEK_CUR);
+	  for(ipart=0;ipart<nparts;ipart++)
+	    {
+	      fread (&(pos[0]), 3, sizeof(float),fp);
+	    }
+	  fseek(fp, sizeof(int), SEEK_CUR);
+
+
+	  fseek(fp, sizeof(int), SEEK_CUR);
+	  for(ipart=0;ipart<nparts;ipart++)
+	    {
+	      fread (&(vel[0]), 3, sizeof(float),fp);
+	    }
+	  fseek(fp, sizeof(int), SEEK_CUR);
+
+
+
+	  fseek(fp, sizeof(int), SEEK_CUR);
+	  // skip ids
+	  fseek(fp, ipart*sizeof(long long), SEEK_CUR);
+	  /* for(ipart=0;ipart<nparts;ipart++)  */
+	  /* 	{ */
+	  /* 	  fread (&id, 1, sizeof(long long),fp); */
+	  /* 	} */
+	  fseek(fp, sizeof(int), SEEK_CUR);
+
 	}
-      fseek(fp, sizeof(int), SEEK_CUR);
+      fclose(fp);
+    }
+}
 
-
-      fseek(fp, sizeof(int), SEEK_CUR);
-      for(ipart=0;ipart<nparts;ipart++)
-	{
-	  fread (&(vel[0]), 3, sizeof(float),fp);
-	}
-      fseek(fp, sizeof(int), SEEK_CUR);
-
-
-
-      fseek(fp, sizeof(int), SEEK_CUR);
-      // skip ids
-      fseek(fp, ipart*sizeof(long long), SEEK_CUR);
-      /* for(ipart=0;ipart<nparts;ipart++)  */
-      /* 	{ */
-      /* 	  fread (&id, 1, sizeof(long long),fp); */
-      /* 	} */
-      fseek(fp, sizeof(int), SEEK_CUR);
-
+int main ()
+{
+  int filenr;
+  for(filenr=1;filenr<=138,filenr++)
+    {
+      readmfof(filenr);
     }
   return 0;
 }
