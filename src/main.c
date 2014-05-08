@@ -69,10 +69,9 @@ void readmfofsnap(int filenr)
 
 int main ()
 {
-  int filenr;
-  for(filenr=1;filenr<=138,filenr++)
-    {
-      readmfof(filenr);
-    }
+  int filenr=138;
+
+  readmfof(filenr);
+
   return 0;
 }
