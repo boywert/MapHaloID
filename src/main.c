@@ -61,14 +61,14 @@ struct AHFhalo {
 uint64_t read_clueAHFhalos( struct halostruct *halo)
 {
   char strbuffer[2048];
-  //struct AHFhalo ahfhalo;
+  struct AHFhalo ahfhalo;
   char filename[2048];
   int currentHalo = 0;
   FILE *fp;
   int stepmaxhalo = 1000000;
   int maxhalo;
   maxhalo = stepmaxhalo;
-  struct halostruct *halo;
+  //struct halostruct *halo;
 
   halo = malloc(maxhalo*sizeof(struct AHFhalo));
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
@@ -166,7 +166,7 @@ uint64_t readmfofsnap(int filenr, struct halostruct *halo)
   // int firstfile,lastfile;
   int i;
   uint64_t totalhalos = 0;
-  //struct halostruct *halo;
+  // struct halostruct *halo;
   long long currentHalo = 0;
   
   halo = malloc(0);
