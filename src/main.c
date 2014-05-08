@@ -3,10 +3,10 @@
 #include <stdint.h>
 
 struct halostruct {
-  long long unsigned host=0;
+  long long unsigned host;
   float pos[3];
   float vel[3];
-  long long nextid=-1;
+  long long nextid;
 };
 
 struct AHFhalo {
