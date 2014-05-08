@@ -199,34 +199,34 @@ void readmfofsnap(int filenr)
 	      cmvel[i] = 0.;
 	      cmpos[i] = 0.;
 	    }
-	  // bpos = malloc(3*nparts*sizeof(float));
-	  // bvel = malloc(3*nparts*sizeof(float));
+	  bpos = malloc(3*nparts*sizeof(float));
+	  bvel = malloc(3*nparts*sizeof(float));
 
 
 
 	  fseek(fp, sizeof(int), SEEK_CUR);
-	  // fread (&(bpos[0]), 3*nparts, sizeof(float),fp);
+	  fread (&(bpos[0]), 3*nparts, sizeof(float),fp);
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
-	      fread (&(pos[0]), 3, sizeof(float),fp);
+	      // fread (&(pos[0]), 3, sizeof(float),fp);
 	      for(i=0;i<3;i++)
 		{
-		  // cmpos[i] += bpos[ipart*3+i];
-		  cmpos[i] += pos[i];
+		  cmpos[i] += bpos[ipart*3+i];
+		  // cmpos[i] += pos[i];
 		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
 
 
 	  fseek(fp, sizeof(int), SEEK_CUR);
-	  // fread (&(bvel[0]), 3*nparts, sizeof(float),fp);
+	  fread (&(bvel[0]), 3*nparts, sizeof(float),fp);
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
 	      fread (&(vel[0]), 3, sizeof(float),fp);
 	      for(i=0;i<3;i++)
 		{
-		  // cmvel[i] += bvel[ipart*3+i];
-		  cmvel[i] += vel[i];
+		  cmvel[i] += bvel[ipart*3+i];
+		  // cmvel[i] += vel[i];
 		}
 	    }
 	  fseek(fp, sizeof(int), SEEK_CUR);
@@ -258,8 +258,8 @@ void readmfofsnap(int filenr)
 	  halo[currentHalo].nextid = -1;
 	  
 
-	  //free(bpos);
-	  //free(bvel);
+	  free(bpos);
+	  free(bvel);
 	  currentHalo++;
 	}
       fclose(fp);
