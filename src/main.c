@@ -143,7 +143,6 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   
   fclose(fp);
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
-  free(halo);
   return (uint64_t)currentHalo;
 }
 
