@@ -60,11 +60,18 @@ void read_clueAHFhalos()
   char strbuffer[2048];
   struct AHFhalo ahfhalo;
   char filename[2048];
-  int currentHalo;
+  int currentHalo = 0;
   FILE *fp;
+  int stepmaxhalo = 1000000;
+  int maxhalo;
+  maxhalo = stepmaxhalo;
+  struct halostruct *halo;
+
+  halo = malloc(maxhalo*sizeof(struct AHFhalo));
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
+  
   while(fgets(strbuffer,2048,fp))
     {
       //printf("iHalo = %llu\n",iHalo);
@@ -113,10 +120,23 @@ void read_clueAHFhalos()
 	     &(ahfhalo.Phi0),
 	     &(ahfhalo.cNFW) 
 	     );
-      
+      halo[currentHalo].host = ahfhalo.hostHalo;
+      halo[currentHalo].pos[0] = ahfhalo.Xc;
+      halo[currentHalo].pos[1] = ahfhalo.Yc;
+      halo[currentHalo].pos[2] = ahfhalo.Zc;
+      halo[currentHalo].vel[0] = ahfhalo.VXc;
+      halo[currentHalo].vel[1] = ahfhalo.VYc;
+      halo[currentHalo].vel[2] = ahfhalo.VZc;
+      halo[currentHalo].nextid = -1;
+      if(currentHalo == maxhalo-1)
+	{
+	  maxhalo+=stepmaxhalo;
+	  halo = realloc(halo,sizeof(struct AHFhalo)*maxhalo);
+	}
       currentHalo++;
     }
   fclose(fp);
+  free(halo);
       
 }
 
