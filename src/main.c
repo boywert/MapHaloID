@@ -142,7 +142,7 @@ uint64_t read_clueAHFhalos()
   fclose(fp);
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
   free(halo);
-  return currentHalo;
+  return (uint64_t)currentHalo;
 }
 
 
@@ -264,7 +264,7 @@ uint64_t readmfofsnap(int filenr)
 	}
       fclose(fp);
     }
-  return totalhalos;
+  return (uint64_t)totalhalos;
 }
 
 int main ()
