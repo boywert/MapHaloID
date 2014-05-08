@@ -135,7 +135,7 @@ uint64_t read_clueAHFhalos()
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
-	  FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*maxhalo);
+	  AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*maxhalo);
 	}
       currentHalo++;
     }
