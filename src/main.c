@@ -273,7 +273,7 @@ int main ()
   int filenr=88;
   uint64_t ihalo,nhaloFOF,nhaloAHF;
   int *hocFOF,*hocAHF;
-  int xb,yb,zb;
+  int block,xb,yb,zb;
   int i;
   int nsubperdim = 128;
   int totalsub;
@@ -291,8 +291,8 @@ int main ()
   nhaloAHF = read_clueAHFhalos(AHFhalo);
   for(i=0;i<totalsub;i++)
     {
-      FOFhalo[i] = -1;
-      AHFhalo[i] = -1;
+      hocFOF[i] = -1;
+      hocAHF[i] = -1;
     }
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
