@@ -75,7 +75,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   fp = fopen(filename, "r");
   fgets(strbuffer,2048,fp);
   currentHalo = 0;
-  while(fgets(strbuffer,2048,fp))
+  while(fgets(strbuffer,2048,fp) != EOF)
     {
       //printf("iHalo = %llu\n",iHalo);
       sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %d %g %g %g %g %g %g",
@@ -142,7 +142,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
     }
   
   fclose(fp);
-  printf("size: %d\n",(int) sizeof(struct halostruct));
+  // printf("size: %d\n",(int) sizeof(struct halostruct));
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
   return (uint64_t)currentHalo;
 }
