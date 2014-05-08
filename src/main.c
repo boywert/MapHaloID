@@ -68,7 +68,6 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
   int stepmaxhalo = 1000000;
   int maxhalo;
   maxhalo = stepmaxhalo;
-  //struct halostruct *halo;
 
   halo = realloc(halo,maxhalo*sizeof(struct halostruct));
   sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
@@ -132,7 +131,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
       halo[currentHalo].vel[1] = ahfhalo.VYc;
       halo[currentHalo].vel[2] = ahfhalo.VZc;
       halo[currentHalo].nextid = -1;
-      // printf("%f %f %f\n",halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
+      printf("%d %f %f %f\n",currentHalo,halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
       if(currentHalo == maxhalo-1)
 	{
 	  maxhalo+=stepmaxhalo;
@@ -142,7 +141,7 @@ uint64_t read_clueAHFhalos( struct halostruct *halo)
     }
   
   fclose(fp);
-  // printf("size: %d\n",(int) sizeof(struct halostruct));
+
   halo = realloc(halo,sizeof(struct halostruct)*currentHalo);
   return (uint64_t)currentHalo;
 }
@@ -309,7 +308,7 @@ int main ()
   nhaloAHF = read_clueAHFhalos(&(AHFhalo[0]));
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
-      printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
+      // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
       xb = AHFhalo[ihalo].pos[0]/subsize;
       yb = AHFhalo[ihalo].pos[1]/subsize;
       zb = AHFhalo[ihalo].pos[2]/subsize;
