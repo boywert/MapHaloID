@@ -222,7 +222,7 @@ void readmfofsnap(int filenr)
 	  fread (&(bvel[0]), 3*nparts, sizeof(float),fp);
 	  for(ipart=0;ipart<nparts;ipart++)
 	    {
-	      fread (&(vel[0]), 3, sizeof(float),fp);
+	      // fread (&(vel[0]), 3, sizeof(float),fp);
 	      for(i=0;i<3;i++)
 		{
 		  cmvel[i] += bvel[ipart*3+i];
