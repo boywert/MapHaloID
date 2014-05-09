@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <mpi.h>
+#include <math.h>
 
 #define  MIN(x,y)  ((x)<(y) ?(x):(y))
 
 int rank, size;
-
+const float FOFpmass = 287905.756504;
+const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
 struct halostruct {
   uint64_t host;
@@ -133,6 +135,7 @@ int64_t read_clueAHFhalos()
 		 );
 	  AHFhalo[currentHalo].host = ahfhalo.hostHalo;
 	  AHFhalo[currentHalo].nparts = ahfhalo.npart;
+	  AHFhalo[currentHalo].mass = AHFpmass*ahfhalo.npart;
 	  AHFhalo[currentHalo].pos[0] = ahfhalo.Xc;
 	  AHFhalo[currentHalo].pos[1] = ahfhalo.Yc;
 	  AHFhalo[currentHalo].pos[2] = ahfhalo.Zc;
@@ -282,6 +285,7 @@ int64_t readmfofsnap(int filenr)
 	    }
 	  aFOFhalo[currentHalo].host = 0;
 	  aFOFhalo[currentHalo].nparts = nparts;
+	  aFOFhalo[currentHalo].mass = nparts*FOFpmass;
 	  aFOFhalo[currentHalo].pos[0] = cmpos[0]*boxsize;
 	  aFOFhalo[currentHalo].pos[1] = cmpos[1]*boxsize;
 	  aFOFhalo[currentHalo].pos[2] = cmpos[2]*boxsize;
@@ -347,6 +351,9 @@ int main (int argc, char** argv)
   int blockA;
   int firstsub,lastsub;
   int curhalo_src,curhalo_tar;
+  double merit,maxmerit;
+  int maxmeritid;
+  double sigma_pos,sigma_vel,sigma_mass;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -388,7 +395,7 @@ int main (int argc, char** argv)
 
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
-      if(AHFhalo[ihalo].host == 0)
+      if(AHFhalo[ihalo].host == 0 && AHFhalo[ihalo].nparts >= 50)
 	{
 	  xb = AHFhalo[ihalo].pos[0]/subsize;
 	  yb = AHFhalo[ihalo].pos[1]/subsize;
@@ -405,6 +412,8 @@ int main (int argc, char** argv)
   firstsub = rank*blockA;
   lastsub = MIN(blockA*(rank+1)-1,totalsub-1);
 
+
+ 
   for(i=firstsub;i<=lastsub;i++)
     {
       if(rank == 0)
@@ -414,10 +423,13 @@ int main (int argc, char** argv)
       xb = i/(nsubperdim*nsubperdim);
       yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
       zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
-
+      
       curhalo_src = hocFOF[i];
       while(curhalo_src > -1)
 	{
+	  sigma_pos = 50.0;
+	  sigma_vel = 50.0;
+	  sigma_mass = FOFhalo[curhalo_src].mass*0.35;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
 	      ib = target_b/9 - 1;
@@ -427,12 +439,27 @@ int main (int argc, char** argv)
 	      block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim 
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
-
+	      
+	      maxmerit = 0.;
 	      curhalo_tar = hocAHF[block];
 	      while(curhalo_tar > -1)
 		{
+		  merit = pow((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos,2)
+		    + pow((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos,2)
+		    + pow((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos,2)
+		    + pow((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel,2)
+		    + pow((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel,2)
+		    + pow((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel,2)
+		    + pow((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass,2);
+		  merit = exp(-1.*merit);
+		  if(merit > maxmerit)
+		    {
+		      maxmeritid = curhalo_tar;
+		      maxmerit = merit;
+		    }
 		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 		}
+	      printf("%d merit:%lf\n",maxmeritid,maxmerit);
 	    }
 	  curhalo_src = FOFhalo[curhalo_src].nextid;
 	}
