@@ -532,13 +532,13 @@ int main (int argc, char** argv)
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
-		  merit = ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
-		    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
-		    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
-		    + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
-		    + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
-		    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
-		    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass);
+		  merit = // ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
+		    // + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
+		    // + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
+		    // + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
+		    // + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
+		    // + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
+		     ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
 		  if(merit > maxmerit)
