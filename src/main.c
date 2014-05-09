@@ -407,6 +407,10 @@ int main (int argc, char** argv)
 
   for(i=firstsub;i<=lastsub;i++)
     {
+      if(rank == 0)
+	{
+	  printf("working on grid %d/%d:%d\n",i,firstsub,lastsub);
+	}
       xb = i/(nsubperdim*nsubperdim);
       yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
       zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
