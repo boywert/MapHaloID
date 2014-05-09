@@ -315,6 +315,7 @@ int64_t readmfofsnap(int filenr)
       tag = i;
       if(rank == 0)
 	{
+	  printf("Transfering from %d\n",i);
 	  MPI_Recv(&(FOFhalo[currentHalo]), nhalosRank[i], MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
 	  currentHalo+=nhalosRank[i];
 	}
