@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <mpi.h>
 
+#define  MIN(x,y)  ((x)<(y) ?(x):(y))
 
 int rank, size;
 
@@ -182,17 +183,23 @@ int64_t readmfofsnap(int filenr)
   float mass;
   // long long id;
   int nfiles = 4096;
-  // int firstfile,lastfile;
+  int firstfile,lastfile;
   int i;
   uint64_t totalhalos = 0;
   // struct halostruct *halo;
   long long currentHalo = 0;
+  int blockA;
   
+  blockA = nfiles/size;
+  
+  firstfile = 1 + blockA*rank;
+  lastfile = MIN(blockA*(rank+1),nfiles);
+
   FOFhalo = realloc(FOFhalo,0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
   
   
-  for(ifile=1;ifile<=nfiles;ifile++)
+  for(ifile=firstfile;ifile<=lastfile;ifile++)
     {
       printf("READING %d\n",ifile);
       sprintf(structfname,"%s/halos_strct_%05d",folder,ifile);
@@ -318,39 +325,42 @@ int main (int *argc, char** argv)
 
   FOFhalo = malloc(0);
 
-  /* nhaloFOF = readmfofsnap(filenr); */
+  nhaloFOF = readmfofsnap(filenr);
 
-  /* for(ihalo=0;ihalo<nhaloFOF;ihalo++) */
-  /*   { */
-  /*     xb = FOFhalo[ihalo].pos[0]/subsize; */
-  /*     yb = FOFhalo[ihalo].pos[1]/subsize; */
-  /*     zb = FOFhalo[ihalo].pos[2]/subsize; */
+  for(ihalo=0;ihalo<nhaloFOF;ihalo++)
+    {
+      xb = FOFhalo[ihalo].pos[0]/subsize;
+      yb = FOFhalo[ihalo].pos[1]/subsize;
+      zb = FOFhalo[ihalo].pos[2]/subsize;
       
-  /*     block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb; */
-  /*     FOFhalo[ihalo].nextid = hocFOF[block]; */
-  /*     hocFOF[block] = ihalo; */
-  /*   } */
+      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+      FOFhalo[ihalo].nextid = hocFOF[block];
+      hocFOF[block] = ihalo;
+    }
 
   AHFhalo = malloc(0);
 
-  nhaloAHF = read_clueAHFhalos();
+  /* nhaloAHF = read_clueAHFhalos(); */
 
-  for(ihalo=0;ihalo<nhaloAHF;ihalo++)
-    {
-      // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
-      xb = AHFhalo[ihalo].pos[0]/subsize;
-      yb = AHFhalo[ihalo].pos[1]/subsize;
-      zb = AHFhalo[ihalo].pos[2]/subsize;
+  /* for(ihalo=0;ihalo<nhaloAHF;ihalo++) */
+  /*   { */
+  /*     // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]); */
+  /*     xb = AHFhalo[ihalo].pos[0]/subsize; */
+  /*     yb = AHFhalo[ihalo].pos[1]/subsize; */
+  /*     zb = AHFhalo[ihalo].pos[2]/subsize; */
       
-      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+  /*     block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb; */
 
-      // printf("%llu/%llu  %d: %d %d %d \n",ihalo,nhaloAHF,block,xb,yb,zb);
-      AHFhalo[ihalo].nextid = hocAHF[block];
-      hocAHF[block] = ihalo;      
-    }
+  /*     // printf("%llu/%llu  %d: %d %d %d \n",ihalo,nhaloAHF,block,xb,yb,zb); */
+  /*     AHFhalo[ihalo].nextid = hocAHF[block]; */
+  /*     hocAHF[block] = ihalo;       */
+  /*   } */
+
 
   free(hocFOF);
   free(hocAHF);
+  free(AHFhalo);
+  free(FOFhalo);
   MPI_Finalize();
   return 0;
 }
