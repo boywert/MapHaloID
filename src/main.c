@@ -330,7 +330,7 @@ int64_t readmfofsnap(int filenr)
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(FOFhalo, sizeof(struct halostruct)*totalallhalos, MPI_BYTE, 0, MPI_COMM_WORLD);
   MPI_Barrier(MPI_COMM_WORLD);
-  return (int64_t) totalhalos;
+  return (int64_t) totalallhalos;
 }
 
 int main (int argc, char** argv)
@@ -368,32 +368,35 @@ int main (int argc, char** argv)
 
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
-      xb = FOFhalo[ihalo].pos[0]/subsize;
-      yb = FOFhalo[ihalo].pos[1]/subsize;
-      zb = FOFhalo[ihalo].pos[2]/subsize;
+      if(FOFhalo[ihalo].host == 0)
+	{
+	  xb = FOFhalo[ihalo].pos[0]/subsize;
+	  yb = FOFhalo[ihalo].pos[1]/subsize;
+	  zb = FOFhalo[ihalo].pos[2]/subsize;
       
-      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
-      FOFhalo[ihalo].nextid = hocFOF[block];
-      hocFOF[block] = ihalo;
+	  block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+	  FOFhalo[ihalo].nextid = hocFOF[block];
+	  hocFOF[block] = ihalo;
+	}
     }
 
   AHFhalo = malloc(0);
 
-  /* nhaloAHF = read_clueAHFhalos(); */
+  nhaloAHF = read_clueAHFhalos();
 
-  /* for(ihalo=0;ihalo<nhaloAHF;ihalo++) */
-  /*   { */
-  /*     // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]); */
-  /*     xb = AHFhalo[ihalo].pos[0]/subsize; */
-  /*     yb = AHFhalo[ihalo].pos[1]/subsize; */
-  /*     zb = AHFhalo[ihalo].pos[2]/subsize; */
+  for(ihalo=0;ihalo<nhaloAHF;ihalo++)
+    {
+      if(AHFhalo[ihalo].host == 0)
+	{
+	  xb = AHFhalo[ihalo].pos[0]/subsize;
+	  yb = AHFhalo[ihalo].pos[1]/subsize;
+	  zb = AHFhalo[ihalo].pos[2]/subsize;
       
-  /*     block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb; */
-
-  /*     // printf("%llu/%llu  %d: %d %d %d \n",ihalo,nhaloAHF,block,xb,yb,zb); */
-  /*     AHFhalo[ihalo].nextid = hocAHF[block]; */
-  /*     hocAHF[block] = ihalo;       */
-  /*   } */
+	  block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+	  AHFhalo[ihalo].nextid = hocAHF[block];
+	  hocAHF[block] = ihalo;
+	}
+    }
 
 
   free(hocFOF);
