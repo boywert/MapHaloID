@@ -228,7 +228,7 @@ int64_t readmfofsnap(int filenr)
       if(strcmp("unit_l",ident)==0)
 	{
 	  sscanf(value,"%g",&unit_l);
-	  unit_l *= 100000.;
+	  unit_l /= 100000.;
 	}
       if(strcmp("unit_t",ident)==0)
 	{
