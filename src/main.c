@@ -185,9 +185,9 @@ int64_t readmfofsnap(int filenr)
   int nfiles = 4096;
   int firstfile,lastfile;
   int i;
-  uint64_t totalhalos = 0;
+  int  totalhalos = 0;
   // struct halostruct *halo;
-  long long currentHalo = 0;
+  int  currentHalo = 0;
   int blockA;
   
   blockA = nfiles/size;
