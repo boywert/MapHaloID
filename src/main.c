@@ -200,7 +200,7 @@ int64_t readmfofsnap(int filenr)
   struct halostruct *aFOFhalo;
   MPI_Status status;
   char *pch;
-  double unit_t,unit_l;
+  float unit_t,unit_l;
   blockA = nfiles/size;
   nhalosRank = malloc(size*sizeof(int));
 
