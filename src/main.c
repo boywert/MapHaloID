@@ -307,10 +307,11 @@ int64_t readmfofsnap(int filenr)
   FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*totalallhalos);
   if(rank == 0)
     {
-      currentHalo = 0;
+      currentHalo = nhalosRank[0];
+      memcpy (&(FOFhalo[0]), &(aFOFhalo[0]), nhalosRank[0]*sizeof(struct halostruct));
     }
   MPI_Barrier(MPI_COMM_WORLD);
-  for(i=0;i<size;i++)
+  for(i=1;i<size;i++)
     {
       tag = i;
       if(rank == 0)
