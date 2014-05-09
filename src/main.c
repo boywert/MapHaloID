@@ -201,8 +201,9 @@ int64_t readmfofsnap(int filenr)
   
   for(ifile=firstfile;ifile<=lastfile;ifile++)
     {
-      printf("READING %d\n",ifile);
+      
       sprintf(structfname,"%s/halos_strct_%05d",folder,ifile);
+      printf("READING %d  %s\n",ifile,structfname);
       fp = fopen(structfname,"rb");
   
   
