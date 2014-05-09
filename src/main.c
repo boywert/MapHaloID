@@ -420,7 +420,7 @@ int main (int argc, char** argv)
 	      ib = target_b/9 - 1;
 	      jb = (target_b - ib*9)/3 -1;
 	      kb = target_b - ib*9 - jb*3 -1;
-	      printf("%d %d %d\n",ib,jb,kb);
+	      printf("%d : %d %d %d\n",target_b,ib,jb,kb);
 	    }
 	}
       
