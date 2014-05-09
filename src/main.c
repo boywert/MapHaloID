@@ -213,6 +213,7 @@ int64_t readmfofsnap(int filenr)
       fseek(fp, sizeof(int), SEEK_CUR);
 
       totalhalos += nhalos;
+      printf("nhalos:%d  total:%d\n",nhalos,totalhalos);
       FOFhalo = realloc(FOFhalo,totalhalos*sizeof(struct halostruct));
 
       for(ihalo=0;ihalo<nhalos;ihalo++)
