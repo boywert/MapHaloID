@@ -189,9 +189,10 @@ int64_t readmfofsnap(int filenr)
   // struct halostruct *halo;
   int  currentHalo = 0;
   int totalallhalos;
-  int blockA;
+  int blockA,tag;
   int *nhalosRank;
   struct halostruct *aFOFhalo;
+  MPI_Status status;
   blockA = nfiles/size;
   nhalosRank = malloc(size*sizeof(int));
 
@@ -304,9 +305,29 @@ int64_t readmfofsnap(int filenr)
 
   MPI_Barrier(MPI_COMM_WORLD);
   FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*totalallhalos);
-
+  if(rank == 0)
+    {
+      currentHalo = 0;
+    }
   MPI_Barrier(MPI_COMM_WORLD);
+  for(i=0;i<size;i++)
+    {
+      tag = i;
+      if(rank == 0)
+	{
+	  MPI_Recv(&(FOFhalo[currentHalo]), nhalosRank[i], MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
+	  currentHalo+=nhalosRank[i];
+	}
+      if(rank == i)
+	{
+	  MPI_Send(aFOFhalo, nhalosRank[i], MPI_BYTE, 0, tag, MPI_COMM_WORLD);
+	}
+      MPI_Barrier(MPI_COMM_WORLD);
+    }
   free(nhalosRank);
+  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Bcast(FOFhalo, sizeof(struct halostruct)*totalallhalos, MPI_BYTE, 0, MPI_COMM_WORLD);
+  MPI_Barrier(MPI_COMM_WORLD);
   return (int64_t) totalhalos;
 }
 
