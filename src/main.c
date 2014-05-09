@@ -176,7 +176,7 @@ int64_t readmfofsnap(int filenr)
 {
   char folder[1024];
   //int filenr=138;
-  char massfname[1024],structfname[1024];
+  char massfname[1024],structfname[1024],infofile[1024];
   float  pos[3],vel[3];
   float *bpos,*bvel;
   double cmpos[3],cmvel[3];
@@ -204,8 +204,10 @@ int64_t readmfofsnap(int filenr)
 
   aFOFhalo = malloc(0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
+  sprintf(infofile,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/cutouts/1/info_%05d.txt",filenr,filenr);
   
   
+
   for(ifile=firstfile;ifile<=lastfile;ifile++)
     {
       
@@ -427,8 +429,8 @@ int main (int argc, char** argv)
       curhalo_src = hocFOF[i];
       while(curhalo_src > -1)
 	{
-	  sigma_pos = 50.0;
-	  sigma_vel = 50.0;
+	  sigma_pos = 500.0;
+	  sigma_vel = 100.0;
 	  sigma_mass = FOFhalo[curhalo_src].mass*0.35;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
