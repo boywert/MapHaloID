@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <mpi.h>
+
+
+int rank, size;
 
 const float boxsize = 64000.; 
 struct halostruct {
@@ -58,7 +62,8 @@ struct AHFhalo {
   float   cNFW;
 };
 struct halostruct *AHFhalo,*FOFhalo;
-uint64_t read_clueAHFhalos()
+
+int64_t read_clueAHFhalos()
 {
   char strbuffer[2048];
   struct AHFhalo ahfhalo;
@@ -67,89 +72,103 @@ uint64_t read_clueAHFhalos()
   FILE *fp;
   int stepmaxhalo = 1000000;
   int maxhalo;
-  maxhalo = stepmaxhalo;
 
-  AHFhalo = realloc(AHFhalo,maxhalo*sizeof(struct halostruct));
-  sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
-  fp = fopen(filename, "r");
-  fgets(strbuffer,2048,fp);
-  currentHalo = 0;
-  while(fgets(strbuffer,2048,fp)!=NULL)
+  if(rank == 0)
     {
-      //printf("iHalo = %llu\n",iHalo);
-      sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %d %g %g %g %g %g %g",
-	     &(ahfhalo.ID),
-	     &(ahfhalo.hostHalo),
-	     &(ahfhalo.numSubStruct),
-	     &(ahfhalo.Mvir),
-	     &(ahfhalo.npart),
-	     &(ahfhalo.Xc),
-	     &(ahfhalo.Yc),
-	     &(ahfhalo.Zc),
-	     &(ahfhalo.VXc),
-	     &(ahfhalo.VYc),
-	     &(ahfhalo.VZc),
-	     &(ahfhalo.Rvir), 
-	     &(ahfhalo.Rmax),
-	     &(ahfhalo.r2),
-	     &(ahfhalo.mbp_offset),
-	     &(ahfhalo.com_offset),
-	     &(ahfhalo.Vmax),
-	     &(ahfhalo.v_esc),
-	     &(ahfhalo.sigV),
-	     &(ahfhalo.lambda),
-	     &(ahfhalo.lambdaE),
-	     &(ahfhalo.Lx),
-	     &(ahfhalo.Ly),
-	     &(ahfhalo.Lz),
-	     &(ahfhalo.b),
-	     &(ahfhalo.c),
-	     &(ahfhalo.Eax),
-	     &(ahfhalo.Eay),
-	     &(ahfhalo.Eaz),
-	     &(ahfhalo.Ebx), 
-	     &(ahfhalo.Eby),
-	     &(ahfhalo.Ebz),
-	     &(ahfhalo.Ecx), 
-	     &(ahfhalo.Ecy), 
-	     &(ahfhalo.Ecz),
-	     &(ahfhalo.ovdens),
-	     &(ahfhalo.nbins),
-	     &(ahfhalo.fMhires),
-	     &(ahfhalo.Ekin),
-	     &(ahfhalo.Epot),
-	     &(ahfhalo.SurfP),
-	     &(ahfhalo.Phi0),
-	     &(ahfhalo.cNFW) 
-	     );
-      AHFhalo[currentHalo].host = ahfhalo.hostHalo;
-      AHFhalo[currentHalo].nparts = ahfhalo.npart;
-      AHFhalo[currentHalo].pos[0] = ahfhalo.Xc;
-      AHFhalo[currentHalo].pos[1] = ahfhalo.Yc;
-      AHFhalo[currentHalo].pos[2] = ahfhalo.Zc;
-      AHFhalo[currentHalo].vel[0] = ahfhalo.VXc;
-      AHFhalo[currentHalo].vel[1] = ahfhalo.VYc;
-      AHFhalo[currentHalo].vel[2] = ahfhalo.VZc;
-      AHFhalo[currentHalo].nextid = -1;
-      // printf("%d %f %f %f\n",currentHalo,halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
-      if(currentHalo == maxhalo-1)
-	{
-	  maxhalo+=stepmaxhalo;
-	  AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*maxhalo);
-	}
-      currentHalo++;
-    }
-  
-  fclose(fp);
+      maxhalo = stepmaxhalo;
 
-  AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*currentHalo);
-  return (uint64_t)currentHalo;
+      AHFhalo = realloc(AHFhalo,maxhalo*sizeof(struct halostruct));
+      sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
+      fp = fopen(filename, "r");
+      fgets(strbuffer,2048,fp);
+      currentHalo = 0;
+      while(fgets(strbuffer,2048,fp)!=NULL)
+	{
+	  //printf("iHalo = %llu\n",iHalo);
+	  sscanf(strbuffer,"%llu %llu %d %g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %d %g %g %g %g %g %g",
+		 &(ahfhalo.ID),
+		 &(ahfhalo.hostHalo),
+		 &(ahfhalo.numSubStruct),
+		 &(ahfhalo.Mvir),
+		 &(ahfhalo.npart),
+		 &(ahfhalo.Xc),
+		 &(ahfhalo.Yc),
+		 &(ahfhalo.Zc),
+		 &(ahfhalo.VXc),
+		 &(ahfhalo.VYc),
+		 &(ahfhalo.VZc),
+		 &(ahfhalo.Rvir), 
+		 &(ahfhalo.Rmax),
+		 &(ahfhalo.r2),
+		 &(ahfhalo.mbp_offset),
+		 &(ahfhalo.com_offset),
+		 &(ahfhalo.Vmax),
+		 &(ahfhalo.v_esc),
+		 &(ahfhalo.sigV),
+		 &(ahfhalo.lambda),
+		 &(ahfhalo.lambdaE),
+		 &(ahfhalo.Lx),
+		 &(ahfhalo.Ly),
+		 &(ahfhalo.Lz),
+		 &(ahfhalo.b),
+		 &(ahfhalo.c),
+		 &(ahfhalo.Eax),
+		 &(ahfhalo.Eay),
+		 &(ahfhalo.Eaz),
+		 &(ahfhalo.Ebx), 
+		 &(ahfhalo.Eby),
+		 &(ahfhalo.Ebz),
+		 &(ahfhalo.Ecx), 
+		 &(ahfhalo.Ecy), 
+		 &(ahfhalo.Ecz),
+		 &(ahfhalo.ovdens),
+		 &(ahfhalo.nbins),
+		 &(ahfhalo.fMhires),
+		 &(ahfhalo.Ekin),
+		 &(ahfhalo.Epot),
+		 &(ahfhalo.SurfP),
+		 &(ahfhalo.Phi0),
+		 &(ahfhalo.cNFW) 
+		 );
+	  AHFhalo[currentHalo].host = ahfhalo.hostHalo;
+	  AHFhalo[currentHalo].nparts = ahfhalo.npart;
+	  AHFhalo[currentHalo].pos[0] = ahfhalo.Xc;
+	  AHFhalo[currentHalo].pos[1] = ahfhalo.Yc;
+	  AHFhalo[currentHalo].pos[2] = ahfhalo.Zc;
+	  AHFhalo[currentHalo].vel[0] = ahfhalo.VXc;
+	  AHFhalo[currentHalo].vel[1] = ahfhalo.VYc;
+	  AHFhalo[currentHalo].vel[2] = ahfhalo.VZc;
+	  AHFhalo[currentHalo].nextid = -1;
+	  // printf("%d %f %f %f\n",currentHalo,halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
+	  if(currentHalo == maxhalo-1)
+	    {
+	      maxhalo+=stepmaxhalo;
+	      AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*maxhalo);
+	    }
+	  currentHalo++;
+	}
+  
+      fclose(fp);
+
+      AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*currentHalo);
+    }
+  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Bcast(&currentHalo, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Barrier(MPI_COMM_WORLD);
+  if(rank != 0)
+    {
+      AHFhalo = realloc(AHFhalo,sizeof(struct halostruct)*currentHalo);
+    }
+  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Bcast(AHFhalo, sizeof(struct halostruct)*currentHalo, MPI_BYTE, 0, MPI_COMM_WORLD);
+  MPI_Barrier(MPI_COMM_WORLD);
+  return (int64_t)currentHalo;
 }
 
 
 
 
-uint64_t readmfofsnap(int filenr)
+int64_t readmfofsnap(int filenr)
 {
   char folder[1024];
   //int filenr=138;
@@ -265,13 +284,13 @@ uint64_t readmfofsnap(int filenr)
 	}
       fclose(fp);
     }
-  return (uint64_t) totalhalos;
+  return (int64_t) totalhalos;
 }
 
-int main ()
+int main (int *argc, char** argv)
 {
   int filenr=88;
-  uint64_t ihalo,nhaloFOF,nhaloAHF;
+  int64_t ihalo,nhaloFOF,nhaloAHF;
   int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
   int i;
@@ -280,20 +299,27 @@ int main ()
   //   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
 
+
+  MPI_Init (&argc, &argv);	/* starts MPI */
+  MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
+  MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
+
   totalsub = nsubperdim*nsubperdim*nsubperdim;
   subsize = boxsize/nsubperdim;
 
   hocFOF = malloc(sizeof(int)*totalsub);
   hocAHF = malloc(sizeof(int)*totalsub);
 
-
-
   for(i=0;i<totalsub;i++)
     {
       hocFOF[i] = -1;
       hocAHF[i] = -1;
     }
-  /* nhaloFOF = readmfofsnap(filenr,FOFhalo); */
+
+  FOFhalo = malloc(0);
+
+  /* nhaloFOF = readmfofsnap(filenr); */
+
   /* for(ihalo=0;ihalo<nhaloFOF;ihalo++) */
   /*   { */
   /*     xb = FOFhalo[ihalo].pos[0]/subsize; */
@@ -304,8 +330,11 @@ int main ()
   /*     FOFhalo[ihalo].nextid = hocFOF[block]; */
   /*     hocFOF[block] = ihalo; */
   /*   } */
+
   AHFhalo = malloc(0);
+
   nhaloAHF = read_clueAHFhalos();
+
   for(ihalo=0;ihalo<nhaloAHF;ihalo++)
     {
       // printf("%llu %f %f %f %f %f %f\n",ihalo,AHFhalo[ihalo].pos[0],AHFhalo[ihalo].pos[1],AHFhalo[ihalo].pos[2],AHFhalo[ihalo].vel[0],AHFhalo[ihalo].vel[1],AHFhalo[ihalo].vel[2]);
@@ -319,7 +348,9 @@ int main ()
       AHFhalo[ihalo].nextid = hocAHF[block];
       hocAHF[block] = ihalo;      
     }
+
   free(hocFOF);
   free(hocAHF);
+  MPI_Finalize();
   return 0;
 }
