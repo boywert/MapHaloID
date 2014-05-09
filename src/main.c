@@ -80,6 +80,7 @@ int64_t read_clueAHFhalos()
     {
       maxhalo = stepmaxhalo;
 
+
       AHFhalo = realloc(AHFhalo,maxhalo*sizeof(struct halostruct));
       sprintf(filename,"/scratch/01937/cs390/B64_2048_snap_077_halos");
       fp = fopen(filename, "r");
@@ -175,6 +176,7 @@ int64_t read_clueAHFhalos()
 int64_t readmfofsnap(int filenr)
 {
   char folder[1024];
+  char buf[2048],ident[2048],equal[2048],value[2048];
   //int filenr=138;
   char massfname[1024],structfname[1024],infofile[1024];
   float  pos[3],vel[3];
@@ -196,6 +198,8 @@ int64_t readmfofsnap(int filenr)
   int *nhalosRank;
   struct halostruct *aFOFhalo;
   MPI_Status status;
+  char *pch;
+  double unit_t,unit_l;
   blockA = nfiles/size;
   nhalosRank = malloc(size*sizeof(int));
 
@@ -205,8 +209,30 @@ int64_t readmfofsnap(int filenr)
   aFOFhalo = malloc(0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
   sprintf(infofile,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/cutouts/1/info_%05d.txt",filenr,filenr);
-  
-  
+
+  fp = fopen(infofile,"r");
+  while(fgets(buf,2048,fp))
+    {      
+      pch = strtok (buf," \t\n");
+      while (pch != NULL)
+	{
+	  count++;
+	  if(count == 1) sprintf(ident,"%s",pch);
+	  if(count == 2) sprintf(equal, "%s", pch);
+	  if(count == 3) sprintf(value, "%s", pch);
+	  pch = strtok (NULL, " \t\n");
+	}
+      
+      if(strcmp("unit_l",ident)==0)
+	{
+	  printf("unit_l %s\n",value);
+	}
+      if(strcmp("unit_t",ident)==0)
+	{
+	  printf("unit_t %s\n",value);
+	}
+    }
+  fclose(fp);
 
   for(ifile=firstfile;ifile<=lastfile;ifile++)
     {
