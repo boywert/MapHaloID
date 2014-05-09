@@ -434,8 +434,8 @@ int main (int argc, char** argv)
 		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 		}
 	    }
+	  curhalo_src = FOFhalo[curhalo_src].nextid;
 	}
-      curhalo_src = FOFhalo[curhalo_src].nextid;
     }
 
   free(hocFOF);
