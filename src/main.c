@@ -325,7 +325,7 @@ int64_t readmfofsnap(int filenr)
 	  aFOFhalo[currentHalo].vel[2] = cmvel[2];
 	  aFOFhalo[currentHalo].nextid = -1;
 	  
-	  printf("%f %f %f\n",aFOFhalo[currentHalo].vel[0],aFOFhalo[currentHalo].vel[1],aFOFhalo[currentHalo].vel[2]);
+	  // printf("%f %f %f\n",aFOFhalo[currentHalo].vel[0],aFOFhalo[currentHalo].vel[1],aFOFhalo[currentHalo].vel[2]);
 	  free(bpos);
 	  free(bvel);
 	  currentHalo++;
