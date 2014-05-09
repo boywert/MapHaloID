@@ -188,14 +188,17 @@ int64_t readmfofsnap(int filenr)
   int  totalhalos = 0;
   // struct halostruct *halo;
   int  currentHalo = 0;
+  int totalallhalos;
   int blockA;
-  
+  int *nhalosRank;
+  struct halostruct *aFOFhalo;
   blockA = nfiles/size;
-  
+  nhalosRank = malloc(size*sizeof(int));
+
   firstfile = blockA*rank;
   lastfile = MIN(blockA*(rank+1)-1,nfiles-1);
 
-  FOFhalo = realloc(FOFhalo,0);
+  aFOFhalo = malloc(0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
   
   
@@ -215,7 +218,7 @@ int64_t readmfofsnap(int filenr)
 
       totalhalos += nhalos;
       printf("nhalos:%d  total:%d\n",nhalos,totalhalos);
-      FOFhalo = realloc(FOFhalo,totalhalos*sizeof(struct halostruct));
+      aFOFhalo = realloc(aFOFhalo,totalhalos*sizeof(struct halostruct));
 
       for(ihalo=0;ihalo<nhalos;ihalo++)
 	{
@@ -276,15 +279,15 @@ int64_t readmfofsnap(int filenr)
 	      cmpos[i] /= (double)nparts;
 	      
 	    }
-	  FOFhalo[currentHalo].host = 0;
-	  FOFhalo[currentHalo].nparts = nparts;
-	  FOFhalo[currentHalo].pos[0] = cmpos[0]*boxsize;
-	  FOFhalo[currentHalo].pos[1] = cmpos[1]*boxsize;
-	  FOFhalo[currentHalo].pos[2] = cmpos[2]*boxsize;
-	  FOFhalo[currentHalo].vel[0] = cmvel[0];
-	  FOFhalo[currentHalo].vel[1] = cmvel[1];
-	  FOFhalo[currentHalo].vel[2] = cmvel[2];
-	  FOFhalo[currentHalo].nextid = -1;
+	  aFOFhalo[currentHalo].host = 0;
+	  aFOFhalo[currentHalo].nparts = nparts;
+	  aFOFhalo[currentHalo].pos[0] = cmpos[0]*boxsize;
+	  aFOFhalo[currentHalo].pos[1] = cmpos[1]*boxsize;
+	  aFOFhalo[currentHalo].pos[2] = cmpos[2]*boxsize;
+	  aFOFhalo[currentHalo].vel[0] = cmvel[0];
+	  aFOFhalo[currentHalo].vel[1] = cmvel[1];
+	  aFOFhalo[currentHalo].vel[2] = cmvel[2];
+	  aFOFhalo[currentHalo].nextid = -1;
 	  
 
 	  free(bpos);
@@ -294,7 +297,16 @@ int64_t readmfofsnap(int filenr)
       fclose(fp);
       printf("closing file\n");
     }
-  printf("%d  %d \n",(int)currentHalo,(int)totalhalos);
+
+  MPI_Barrier(MPI_COMM_WORLD); MPI_Allgather(&cpart, 2, MPI_INT, &ctotal, 3, MPI_INT, MPI_COMM_WORLD);
+  MPI_Allreduce(&totalhalos, &totalallhalos, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+  MPI_Allgather(&totalhalos,1,MPI_INT,nhalosRank,1,MPI_INT,MPI_COMM_WORLD);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+  FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*totalallhalos);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
   return (int64_t) totalhalos;
 }
 
