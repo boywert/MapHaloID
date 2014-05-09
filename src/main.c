@@ -207,7 +207,7 @@ int64_t readmfofsnap(int filenr)
     {
       
       sprintf(structfname,"%s/halos_strct_%05d",folder,ifile);
-      printf("READING %d  %s\n",ifile,structfname);
+      // printf("READING %d  %s\n",ifile,structfname);
       fp = fopen(structfname,"rb");
   
   
@@ -218,7 +218,7 @@ int64_t readmfofsnap(int filenr)
       fseek(fp, sizeof(int), SEEK_CUR);
 
       totalhalos += nhalos;
-      printf("nhalos:%d  total:%d\n",nhalos,totalhalos);
+      // printf("nhalos:%d  total:%d\n",nhalos,totalhalos);
       aFOFhalo = realloc(aFOFhalo,totalhalos*sizeof(struct halostruct));
 
       for(ihalo=0;ihalo<nhalos;ihalo++)
@@ -296,7 +296,7 @@ int64_t readmfofsnap(int filenr)
 	  currentHalo++;
 	}
       fclose(fp);
-      printf("closing file\n");
+      // printf("closing file\n");
     }
 
   MPI_Barrier(MPI_COMM_WORLD); 
@@ -316,7 +316,7 @@ int64_t readmfofsnap(int filenr)
       tag = i;
       if(rank == 0)
 	{
-	  printf("Transfering from %d\n",i);
+	  // printf("Transfering from %d\n",i);
 	  MPI_Recv(&(FOFhalo[currentHalo]), nhalosRank[i], MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
 	  currentHalo+=nhalosRank[i];
 	}
@@ -339,12 +339,14 @@ int main (int argc, char** argv)
   int64_t ihalo,nhaloFOF,nhaloAHF;
   int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
-  int i;
+  int i,ib,jb,kb,target_b;
   int nsubperdim = 128;
   int totalsub;
   //   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
-
+  int blockA;
+  int firstsub,lastsub;
+  int curhalo_src,curhalo_tar;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -397,7 +399,32 @@ int main (int argc, char** argv)
 	  hocAHF[block] = ihalo;
 	}
     }
+  
+  /* FOF -> AHF */
+  blockA = totalsub/size;
+  firstsub = rank*blockA;
+  lastsub = MIN(blockA*(rank+1)-1,totalsub-1);
 
+  for(i=firstsub;i<=lastsub;i++)
+    {
+      xb = i/(nsubperdim*nsubperdim);
+      yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
+      zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
+
+      curhalo_src = hocFOF[i];
+      while(curhalo_src > -1)
+	{
+	  curhalo_src = FOFhalo[curhalo_src].nextid;
+	  for(target_b=0;target_b<27;target_b++)
+	    {
+	      ib = target_b/9 - 1;
+	      jb = (target_b - ib*9)/3 -1;
+	      kb = target_b - ib*9 - jb*3 -1;
+	      printf("%d %d %d\n",ib,jb,kb);
+	    }
+	}
+      
+    }
 
   free(hocFOF);
   free(hocAHF);
