@@ -550,7 +550,7 @@ int main (int argc, char** argv)
 		}
 	      if(maxmerit > 0.)
 		{
-		  printf("merit:%f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
+		  printf("merit:%f   %f %f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
 		  
 		}
 	    }
