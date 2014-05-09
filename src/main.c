@@ -351,7 +351,7 @@ int main (int argc, char** argv)
   int blockA;
   int firstsub,lastsub;
   int curhalo_src,curhalo_tar;
-  double merit,maxmerit;
+  float merit,maxmerit;
   int maxmeritid;
   double sigma_pos,sigma_vel,sigma_mass;
 
@@ -440,7 +440,7 @@ int main (int argc, char** argv)
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
 	      
-	      maxmerit = 0.;
+	      maxmerit = -1.;
 	      curhalo_tar = hocAHF[block];
 	      while(curhalo_tar > -1)
 		{
@@ -459,7 +459,7 @@ int main (int argc, char** argv)
 		    }
 		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 		}
-	      printf("%d merit:%lf\n",maxmeritid,maxmerit);
+	      printf("%d merit:%f\n",maxmeritid,maxmerit);
 	    }
 	  curhalo_src = FOFhalo[curhalo_src].nextid;
 	}
