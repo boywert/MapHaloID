@@ -227,11 +227,12 @@ int64_t readmfofsnap(int filenr)
       
       if(strcmp("unit_l",ident)==0)
 	{
-	  printf("unit_l %s\n",value);
+	  sscanf(value,"%g",&unit_l);
+	  unit_l *= 100000.;
 	}
       if(strcmp("unit_t",ident)==0)
 	{
-	  printf("unit_t %s\n",value);
+	  sscanf(value,"%g",&unit_t);
 	}
     }
   fclose(fp);
@@ -291,7 +292,7 @@ int64_t readmfofsnap(int filenr)
 	      // fread (&(vel[0]), 3, sizeof(float),fp);
 	      for(i=0;i<3;i++)
 		{
-		  cmvel[i] += bvel[ipart*3+i];
+		  cmvel[i] += bvel[ipart*3+i]*unit_l/unit_t;
 		  // cmvel[i] += vel[i];
 		}
 	    }
