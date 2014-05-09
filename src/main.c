@@ -344,7 +344,7 @@ int main (int argc, char** argv)
   int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
   int i,ib,jb,kb,target_b;
-  int nsubperdim = 128;
+  int nsubperdim = 64;
   int totalsub;
   //   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
@@ -452,6 +452,7 @@ int main (int argc, char** argv)
 		    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
 		    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass);
 		  
+		  merit = exp(-1.*merit);
 		  if(merit > maxmerit)
 		    {
 		      maxmeritid = curhalo_tar;
@@ -459,7 +460,10 @@ int main (int argc, char** argv)
 		    }
 		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 		}
-	      printf("%d merit:%f\n",maxmeritid,maxmerit);
+	      if(merit > 0.)
+		{
+		  printf("%d merit:%f\n",maxmeritid,maxmerit);
+		}
 	    }
 	  curhalo_src = FOFhalo[curhalo_src].nextid;
 	}
