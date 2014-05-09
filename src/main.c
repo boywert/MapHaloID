@@ -414,16 +414,24 @@ int main (int argc, char** argv)
       curhalo_src = hocFOF[i];
       while(curhalo_src > -1)
 	{
-	  curhalo_src = FOFhalo[curhalo_src].nextid;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
 	      ib = target_b/9 - 1;
 	      jb = (target_b - (ib+1)*9)/3 -1;
 	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1;
-	      printf("%d : %d %d %d\n",target_b,ib,jb,kb);
+
+	      block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim 
+		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
+		+ ((zb+kb+nsubperdim)%nsubperdim);
+
+	      curhalo_tar = hocAHF[block];
+	      while(curhalo_tar > -1)
+		{
+		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
+		}
 	    }
 	}
-      
+      curhalo_src = FOFhalo[curhalo_src].nextid;
     }
 
   free(hocFOF);
