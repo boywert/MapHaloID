@@ -462,7 +462,7 @@ int main (int argc, char** argv)
 		    }
 		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 		}
-	      if(merit > 0.)
+	      if(maxmerit > 0.)
 		{
 		  printf("%d merit:%f\n",maxmeritid,maxmerit);
 		}
