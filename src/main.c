@@ -186,6 +186,7 @@ int64_t readmfofsnap(int filenr)
   int ihalo,jhalo,ifile;
   int skip,nhalos,ipart,nparts;
   float mass;
+  int count;
   // long long id;
   int nfiles = 4096;
   int firstfile,lastfile;
@@ -214,6 +215,7 @@ int64_t readmfofsnap(int filenr)
   while(fgets(buf,2048,fp))
     {      
       pch = strtok (buf," \t\n");
+      count = 0;
       while (pch != NULL)
 	{
 	  count++;
