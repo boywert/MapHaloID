@@ -501,7 +501,7 @@ int main (int argc, char** argv)
   /* 	} */
   /*   } */
 
-
+  /* AHF -> FOF */
   for(i=firstsub;i<=lastsub;i++)
     {
       if(rank == 0)
@@ -515,8 +515,8 @@ int main (int argc, char** argv)
       curhalo_src = hocAHF[i];
       while(curhalo_src > -1)
 	{
-	  sigma_pos = 500.0;
-	  sigma_vel = 100.0;
+	  sigma_pos = 100.0;
+	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.35;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
@@ -550,7 +550,7 @@ int main (int argc, char** argv)
 		}
 	      if(maxmerit > 0.)
 		{
-		  printf("%d merit:%f\n",maxmeritid,maxmerit);
+		  printf("merit:%f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
 		  
 		}
 	    }
