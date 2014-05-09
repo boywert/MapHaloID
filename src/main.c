@@ -192,8 +192,8 @@ int64_t readmfofsnap(int filenr)
   
   blockA = nfiles/size;
   
-  firstfile = 1 + blockA*rank+4090;
-  lastfile = MIN(blockA*(rank+1),nfiles);
+  firstfile = blockA*rank-1;
+  lastfile = MIN(blockA*(rank+1)-1,nfiles-1);
 
   FOFhalo = realloc(FOFhalo,0);
   sprintf(folder,"/scratch/00916/tg459470/clues/4096/reduced/output_%05d/fofres/halos",filenr);
