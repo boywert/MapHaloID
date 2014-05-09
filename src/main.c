@@ -291,6 +291,7 @@ int64_t readmfofsnap(int filenr)
 	}
       fclose(fp);
     }
+  printf("%d  %d \n",currentHalo,totalhalos);
   return (int64_t) totalhalos;
 }
 
