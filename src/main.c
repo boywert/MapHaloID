@@ -294,7 +294,7 @@ int64_t readmfofsnap(int filenr)
   return (int64_t) totalhalos;
 }
 
-int main (int *argc, char** argv)
+int main (int argc, char** argv)
 {
   int filenr=88;
   int64_t ihalo,nhaloFOF,nhaloAHF;
