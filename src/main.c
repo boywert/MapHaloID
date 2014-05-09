@@ -192,7 +192,7 @@ int64_t readmfofsnap(int filenr)
   
   blockA = nfiles/size;
   
-  firstfile = 1 + blockA*rank+4096;
+  firstfile = 1 + blockA*rank+4090;
   lastfile = MIN(blockA*(rank+1),nfiles);
 
   FOFhalo = realloc(FOFhalo,0);
