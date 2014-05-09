@@ -298,7 +298,7 @@ int64_t readmfofsnap(int filenr)
       printf("closing file\n");
     }
 
-  MPI_Barrier(MPI_COMM_WORLD); MPI_Allgather(&cpart, 2, MPI_INT, &ctotal, 3, MPI_INT, MPI_COMM_WORLD);
+  MPI_Barrier(MPI_COMM_WORLD); 
   MPI_Allreduce(&totalhalos, &totalallhalos, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
   MPI_Allgather(&totalhalos,1,MPI_INT,nhalosRank,1,MPI_INT,MPI_COMM_WORLD);
 
@@ -306,7 +306,7 @@ int64_t readmfofsnap(int filenr)
   FOFhalo = realloc(FOFhalo,sizeof(struct halostruct)*totalallhalos);
 
   MPI_Barrier(MPI_COMM_WORLD);
-
+  free(nhalosRank);
   return (int64_t) totalhalos;
 }
 
