@@ -411,7 +411,7 @@ int main (int argc, char** argv)
     {
       if(FOFhalo[ihalo].host == 0 )
 	{
-	  if(rank==0)printf("%d %f %f %f %f\n",(int)ihalo,FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
+	  // if(rank==0)printf("%d %f %f %f %f\n",(int)ihalo,FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
 	  xb = FOFhalo[ihalo].pos[0]/subsize;
 	  yb = FOFhalo[ihalo].pos[1]/subsize;
 	  zb = FOFhalo[ihalo].pos[2]/subsize;
