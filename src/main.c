@@ -517,9 +517,9 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
 	{
 	  if(rank==0) printf("Starting: AHF: %d\n",curhalo_src);
-	  sigma_pos = 200.0;
+	  sigma_pos = 100.0;
 	  sigma_vel = 50.0;
-	  sigma_mass = AHFhalo[curhalo_src].mass * 0.1;
+	  sigma_mass = AHFhalo[curhalo_src].mass * 0.2;
 	  maxmerit = -1.;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
