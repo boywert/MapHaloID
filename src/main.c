@@ -521,7 +521,7 @@ int main (int argc, char** argv)
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.35;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
-	      printf("Starting: AHF: %d\n",curhalo_src);
+	      if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
 	      ib = target_b/9 - 1;
 	      jb = (target_b - (ib+1)*9)/3 -1;
 	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1;
