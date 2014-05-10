@@ -557,9 +557,9 @@ int main (int argc, char** argv)
 	  if(maxmerit > 0.)
 	    {
 	      if(rank==0) printf("maxmerit:%f   %f %f D:%f,%f,%f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass
-				 ,((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
-				 ,((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)
-				 ,((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos));
+				 ,((FOFhalo[maxmeritid].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
+				 ,((FOFhalo[maxmeritid].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)
+				 ,((FOFhalo[maxmeritid].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos));
 		  
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
