@@ -376,7 +376,7 @@ int main (int argc, char** argv)
   int64_t ihalo,nhaloFOF,nhaloAHF;
   int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
-  int i,ib,jb,kb,target_b;
+  int i,j,ib,jb,kb,target_b;
   int nsubperdim = 64;
   int totalsub;
   //   struct halostruct *FOFhalo,*AHFhalo;
@@ -388,6 +388,8 @@ int main (int argc, char** argv)
   int maxmeritid;
   double sigma_pos,sigma_vel,sigma_mass;
   int ahf2fof, fof2ahf;
+  int tag;
+  MPI_Status status;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -561,24 +563,58 @@ int main (int argc, char** argv)
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
     }
-
-  for(i=firstsub;i<=lastsub;i++)
-    {    
-      curhalo_src = hocAHF[i];
-      while(curhalo_src > -1)
-	{
-	  ahf2fof = AHFhalo[curhalo_src].AHF2FOF;
-	  if(ahf2fof > -1)
+  MPI_Barrier(MPI_COMM_WORLD);
+  for(j=1;j<size;j++)
+    {
+      tag = j;
+      blockA = totalsub/size;
+      firstsub = j*blockA;
+      lastsub = MIN(blockA*(j+1)-1,totalsub-1);
+      for(i=firstsub;i<=lastsub;i++)
+	{    
+	  curhalo_src = hocAHF[i];
+	  while(curhalo_src > -1)
 	    {
-	      fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
-	      if(curhalo_src != fof2ahf)
+	      if(rank == 0)
 		{
-		  if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+		  MPI_Recv(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
 		}
+	      if(rank == j)
+		{
+		  MPI_Send(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, 0, tag, MPI_COMM_WORLD);
+		}
+	      MPI_Barrier(MPI_COMM_WORLD);
+	      if(rank == 0)
+		{
+		  MPI_Recv(&(AHFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
+		}
+	      if(rank == j)
+		{
+		  MPI_Send(&(AHFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, 0, tag, MPI_COMM_WORLD);
+		}
+	      MPI_Barrier(MPI_COMM_WORLD);
+	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
-	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
     }
+
+  /* for(i=firstsub;i<=lastsub;i++) */
+  /*   {     */
+  /*     curhalo_src = hocAHF[i]; */
+  /*     while(curhalo_src > -1) */
+  /* 	{ */
+  /* 	  ahf2fof = AHFhalo[curhalo_src].AHF2FOF; */
+  /* 	  if(ahf2fof > -1) */
+  /* 	    { */
+  /* 	      fof2ahf = FOFhalo[ahf2fof].FOF2AHF; */
+  /* 	      if(curhalo_src != fof2ahf) */
+  /* 		{ */
+  /* 		  if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf); */
+  /* 		} */
+  /* 	    } */
+  /* 	  curhalo_src = AHFhalo[curhalo_src].nextid; */
+  /* 	} */
+  /*   } */
 
 
   free(hocFOF);
