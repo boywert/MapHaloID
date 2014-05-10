@@ -532,7 +532,7 @@ int main (int argc, char** argv)
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
 	      
-	      printf("block: %d\n",block);
+	      if(rank ==0)printf("block: %d\n",block);
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
