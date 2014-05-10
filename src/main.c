@@ -446,61 +446,62 @@ int main (int argc, char** argv)
 
 
  
-  /* for(i=firstsub;i<=lastsub;i++) */
-  /*   { */
-  /*     if(rank == 0) */
-  /* 	{ */
-  /* 	  printf("working on grid %d/%d:%d\n",i,firstsub,lastsub); */
-  /* 	} */
-  /*     xb = i/(nsubperdim*nsubperdim); */
-  /*     yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim; */
-  /*     zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim; */
+  for(i=firstsub;i<=lastsub;i++)
+    {
+      if(rank == 0)
+  	{
+  	  printf("working on grid %d/%d:%d\n",i,firstsub,lastsub);
+  	}
+      xb = i/(nsubperdim*nsubperdim);
+      yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
+      zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
       
-  /*     curhalo_src = hocFOF[i]; */
-  /*     while(curhalo_src > -1) */
-  /* 	{ */
-  /* 	  sigma_pos = 500.0; */
-  /* 	  sigma_vel = 100.0; */
-  /* 	  sigma_mass = FOFhalo[curhalo_src].mass*0.35; */
-  /* 	  for(target_b=0;target_b<27;target_b++) */
-  /* 	    { */
-  /* 	      ib = target_b/9 - 1; */
-  /* 	      jb = (target_b - (ib+1)*9)/3 -1; */
-  /* 	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1; */
+      curhalo_src = hocFOF[i];
+      while(curhalo_src > -1)
+  	{
+  	  sigma_pos = 100.0;
+  	  sigma_vel = 50.0;
+  	  sigma_mass = FOFhalo[curhalo_src].mass*0.2;
+	  maxmerit = -1.;
+  	  for(target_b=0;target_b<27;target_b++)
+  	    {
+  	      ib = target_b/9 - 1;
+  	      jb = (target_b - (ib+1)*9)/3 -1;
+  	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1;
 
-  /* 	      block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim  */
-  /* 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim */
-  /* 		+ ((zb+kb+nsubperdim)%nsubperdim); */
+  	      block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim
+  		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
+  		+ ((zb+kb+nsubperdim)%nsubperdim);
 	      
-  /* 	      maxmerit = -1.; */
-  /* 	      curhalo_tar = hocAHF[block]; */
-  /* 	      while(curhalo_tar > -1) */
-  /* 		{ */
-  /* 		  merit = ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos) */
-  /* 		    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos) */
-  /* 		    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos) */
-  /* 		    + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel) */
-  /* 		    + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel) */
-  /* 		    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel) */
-  /* 		    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass); */
+  	   
+  	      curhalo_tar = hocAHF[block];
+  	      while(curhalo_tar > -1)
+  		{
+  		  merit = ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
+  		    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
+  		    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
+  		    + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
+  		    + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
+  		    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
+  		    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass);
 		  
-  /* 		  merit = exp(-1.*merit); */
-  /* 		  if(merit > maxmerit) */
-  /* 		    { */
-  /* 		      maxmeritid = curhalo_tar; */
-  /* 		      maxmerit = merit; */
-  /* 		    } */
-  /* 		  curhalo_tar = AHFhalo[curhalo_tar].nextid; */
-  /* 		} */
-  /* 	      if(maxmerit > 0.) */
-  /* 		{ */
-  /* 		  printf("%d merit:%f\n",maxmeritid,maxmerit); */
+  		  merit = exp(-1.*merit);
+  		  if(merit > maxmerit)
+  		    {
+  		      maxmeritid = curhalo_tar;
+  		      maxmerit = merit;
+  		    }
+  		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
+  		}
+  	    }
+	  if(maxmerit > 0.)
+	    {
+	      printf("%d merit:%f\n",maxmeritid,maxmerit);
 		  
-  /* 		} */
-  /* 	    } */
-  /* 	  curhalo_src = FOFhalo[curhalo_src].nextid; */
-  /* 	} */
-  /*   } */
+	    }
+  	  curhalo_src = FOFhalo[curhalo_src].nextid;
+  	}
+    }
 
   /* AHF -> FOF */
   for(i=firstsub;i<=lastsub;i++)
@@ -555,7 +556,7 @@ int main (int argc, char** argv)
 	    }
 	  if(maxmerit > 0.)
 	    {
-	      if(rank==0) printf("maxmerit:%f   m:%f D:%f,%f,%f V:%f,%f,%f\n",maxmerit,(FOFhalo[maxmeritid].mass-AHFhalo[curhalo_src].mass)/AHFhalo[curhalo_src].mass
+	      // if(rank==0) printf("maxmerit:%f   m:%f D:%f,%f,%f V:%f,%f,%f\n",maxmerit,(FOFhalo[maxmeritid].mass-AHFhalo[curhalo_src].mass)/AHFhalo[curhalo_src].mass
 				 ,((FOFhalo[maxmeritid].pos[0] - AHFhalo[curhalo_src].pos[0]))
 				 ,((FOFhalo[maxmeritid].pos[1] - AHFhalo[curhalo_src].pos[1]))
 				 ,((FOFhalo[maxmeritid].pos[2] - AHFhalo[curhalo_src].pos[2]))
