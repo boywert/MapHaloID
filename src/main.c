@@ -577,7 +577,7 @@ int main (int argc, char** argv)
 	    {
 	      if(rank == 0)
 		{
-		  MPI_Recv(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
+		  MPI_Recv(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, j, tag, MPI_COMM_WORLD, &status);
 		}
 	      if(rank == j)
 		{
@@ -586,7 +586,7 @@ int main (int argc, char** argv)
 	      MPI_Barrier(MPI_COMM_WORLD);
 	      if(rank == 0)
 		{
-		  MPI_Recv(&(AHFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
+		  MPI_Recv(&(AHFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, j, tag, MPI_COMM_WORLD, &status);
 		}
 	      if(rank == j)
 		{
