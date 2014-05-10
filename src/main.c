@@ -517,7 +517,7 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
 	{
 	  if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
-	  sigma_pos = 500.0;
+	  sigma_pos = 1000.0;
 	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.10;
 	  maxmerit = -1.;
@@ -531,7 +531,7 @@ int main (int argc, char** argv)
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
 	      
-	      
+	      printf("block: %d\n",block);
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
