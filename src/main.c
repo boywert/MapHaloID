@@ -352,19 +352,19 @@ int64_t readmfofsnap(int filenr)
       if(rank == 0)
 	{
 	  // printf("Transfering from %d\n",i);
-	  MPI_Recv(&(FOFhalo[currentHalo]), nhalosRank[i], MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
+	  MPI_Recv(&(FOFhalo[currentHalo]), sizeof(struct halostruct)*nhalosRank[i], MPI_BYTE, i, tag, MPI_COMM_WORLD, &status);
 	  currentHalo+=nhalosRank[i];
 	}
       if(rank == i)
 	{
-	  MPI_Send(aFOFhalo, nhalosRank[i], MPI_BYTE, 0, tag, MPI_COMM_WORLD);
+	  MPI_Send(&(aFOFhalo[0]), sizeof(struct halostruct)*nhalosRank[i], MPI_BYTE, 0, tag, MPI_COMM_WORLD);
 	}
       MPI_Barrier(MPI_COMM_WORLD);
     }
-  free(nhalosRank);
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(FOFhalo, sizeof(struct halostruct)*totalallhalos, MPI_BYTE, 0, MPI_COMM_WORLD);
   MPI_Barrier(MPI_COMM_WORLD);
+  free(nhalosRank);
   free(aFOFhalo);
   return (int64_t) totalallhalos;
 }
