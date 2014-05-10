@@ -408,7 +408,7 @@ int main (int argc, char** argv)
 
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
-      if(FOFhalo[ihalo].host == 0 && FOFhalo[ihalo].nparts >= 400)
+      if(FOFhalo[ihalo].host == 0 )
 	{
 	  // printf("%d %f\n",(int)ihalo,FOFhalo[ihalo].mass);
 	  xb = FOFhalo[ihalo].pos[0]/subsize;
@@ -516,7 +516,7 @@ int main (int argc, char** argv)
       curhalo_src = hocAHF[i];
       while(curhalo_src > -1)
 	{
-	  if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
+	  if(rank==0) printf("Starting: AHF: %d\n",curhalo_src);
 	  sigma_pos = 1000.0;
 	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.10;
