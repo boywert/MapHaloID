@@ -518,7 +518,7 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
 	{
 	  if(rank==0) printf("Starting: AHF: %d\n",curhalo_src);
-	  sigma_pos = 100.0;
+	  sigma_pos = 500.0;
 	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.05;
 	  maxmerit = -1.;
@@ -556,7 +556,10 @@ int main (int argc, char** argv)
 	    }
 	  if(maxmerit > 0.)
 	    {
-	      if(rank==0) printf("maxmerit:%f   %f %f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
+	      if(rank==0) printf("maxmerit:%f   %f %f D:%f,%f,%f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass
+				 ,((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
+				 ,((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)
+				 ,((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos));
 		  
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
