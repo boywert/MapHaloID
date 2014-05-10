@@ -516,12 +516,13 @@ int main (int argc, char** argv)
       curhalo_src = hocAHF[i];
       while(curhalo_src > -1)
 	{
+	  if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
 	  sigma_pos = 100.0;
 	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.35;
+	  maxmerit = -1.;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
-	      if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
 	      ib = target_b/9 - 1;
 	      jb = (target_b - (ib+1)*9)/3 -1;
 	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1;
@@ -530,7 +531,7 @@ int main (int argc, char** argv)
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
 	      
-	      maxmerit = -1.;
+	      
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
@@ -551,11 +552,11 @@ int main (int argc, char** argv)
 		    }
 		  curhalo_tar = FOFhalo[curhalo_tar].nextid;
 		}
-	      if(maxmerit > 0.)
-		{
-		  if(rank==0) printf("maxmerit:%f   %f %f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
+	    }
+	  if(maxmerit > 0.)
+	    {
+	      if(rank==0) printf("maxmerit:%f   %f %f\n",maxmerit,FOFhalo[curhalo_src].mass,AHFhalo[curhalo_src].mass);
 		  
-		}
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
