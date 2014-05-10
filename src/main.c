@@ -519,7 +519,7 @@ int main (int argc, char** argv)
 	  if(rank==0)printf("Starting: AHF: %d\n",curhalo_src);
 	  sigma_pos = 100.0;
 	  sigma_vel = 50.0;
-	  sigma_mass = AHFhalo[curhalo_src].mass*0.35;
+	  sigma_mass = AHFhalo[curhalo_src].mass*0.10;
 	  maxmerit = -1.;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
@@ -535,13 +535,13 @@ int main (int argc, char** argv)
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
-		  merit = // ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
-		    // + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
-		    // + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
+		  merit =  ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
+		    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
+		    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
 		    // + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
 		    // + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
 		    // + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
-		     ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
+		    + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
 		  if(rank==0) printf("\t\tmerit:%f  %f %f target:%d\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass,curhalo_tar);
