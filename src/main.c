@@ -597,24 +597,26 @@ int main (int argc, char** argv)
 	    }
 	}
     }
-
-  /* for(i=firstsub;i<=lastsub;i++) */
-  /*   {     */
-  /*     curhalo_src = hocAHF[i]; */
-  /*     while(curhalo_src > -1) */
-  /* 	{ */
-  /* 	  ahf2fof = AHFhalo[curhalo_src].AHF2FOF; */
-  /* 	  if(ahf2fof > -1) */
-  /* 	    { */
-  /* 	      fof2ahf = FOFhalo[ahf2fof].FOF2AHF; */
-  /* 	      if(curhalo_src != fof2ahf) */
-  /* 		{ */
-  /* 		  if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf); */
-  /* 		} */
-  /* 	    } */
-  /* 	  curhalo_src = AHFhalo[curhalo_src].nextid; */
-  /* 	} */
-  /*   } */
+  if(rank == 0)
+    {
+      for(i=0;i<totalsub;i++)
+	{
+	  curhalo_src = hocAHF[i];
+	  while(curhalo_src > -1)
+	    {
+	      ahf2fof = AHFhalo[curhalo_src].AHF2FOF;
+	      if(ahf2fof > -1)
+		{
+		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
+		  if(curhalo_src != fof2ahf)
+		    {
+		      if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+		    }
+		}
+	      curhalo_src = AHFhalo[curhalo_src].nextid;
+	    }
+	}
+    }
 
 
   free(hocFOF);
