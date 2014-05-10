@@ -520,7 +520,7 @@ int main (int argc, char** argv)
 	  if(rank==0) printf("Starting: AHF: %d\n",curhalo_src);
 	  sigma_pos = 500.0;
 	  sigma_vel = 50.0;
-	  sigma_mass = AHFhalo[curhalo_src].mass*0.05;
+	  sigma_mass = AHFpmass;
 	  maxmerit = -1.;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
