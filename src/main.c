@@ -498,6 +498,10 @@ int main (int argc, char** argv)
 	    {
 	      FOFhalo[curhalo_src].FOF2AHF = maxmeritid;
 	    }
+	  else
+	    {
+	      FOFhalo[curhalo_src].FOF2AHF = -1;
+	    }
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
     }
@@ -550,6 +554,10 @@ int main (int argc, char** argv)
 	    {
 	      AHFhalo[curhalo_src].AHF2FOF = maxmeritid;	  
 	    }
+	  else
+	    {
+	      AHFhalo[curhalo_src].AHF2FOF = -1;
+	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
     }
@@ -560,10 +568,13 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
 	{
 	  ahf2fof = AHFhalo[curhalo_src].AHF2FOF;
-	  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
-	  if(curhalo_src != fof2ahf)
+	  if(ahf2fof > -1)
 	    {
-	      if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+	      fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
+	      if(curhalo_src != fof2ahf)
+		{
+		  if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+		}
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
