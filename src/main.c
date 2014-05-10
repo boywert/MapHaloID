@@ -17,6 +17,8 @@ struct halostruct {
   float pos[3];
   float vel[3];
   int64_t nextid;
+  int AHF2FOF;
+  int FOF2AHF;
 };
 
 struct AHFhalo {
@@ -385,6 +387,7 @@ int main (int argc, char** argv)
   float merit,maxmerit;
   int maxmeritid;
   double sigma_pos,sigma_vel,sigma_mass;
+  int ahf2fof, fof2ahf;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -448,10 +451,7 @@ int main (int argc, char** argv)
  
   for(i=firstsub;i<=lastsub;i++)
     {
-      if(rank == 0)
-  	{
-  	  printf("working on grid %d/%d:%d\n",i,firstsub,lastsub);
-  	}
+
       xb = i/(nsubperdim*nsubperdim);
       yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
       zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
@@ -494,10 +494,9 @@ int main (int argc, char** argv)
   		  curhalo_tar = AHFhalo[curhalo_tar].nextid;
   		}
   	    }
-	  if(maxmerit > 0.)
+	  if(maxmerit > 0.005)
 	    {
-	      printf("%d merit:%f\n",maxmeritid,maxmerit);
-		  
+	      FOFhalo[curhalo_src].FOF2AHF = maxmeritid;
 	    }
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
@@ -506,10 +505,6 @@ int main (int argc, char** argv)
   /* AHF -> FOF */
   for(i=firstsub;i<=lastsub;i++)
     {
-      if(rank == 0)
-	{
-	  printf("working on grid %d/%d:%d\n",i,firstsub,lastsub);
-	}
       xb = i/(nsubperdim*nsubperdim);
       yb = (i - xb*(nsubperdim*nsubperdim))/nsubperdim;
       zb = i - xb*(nsubperdim*nsubperdim) - yb*nsubperdim;
@@ -517,7 +512,6 @@ int main (int argc, char** argv)
       curhalo_src = hocAHF[i];
       while(curhalo_src > -1)
 	{
-	  if(rank==0) printf("Starting: AHF: %d\n",curhalo_src);
 	  sigma_pos = 100.0;
 	  sigma_vel = 50.0;
 	  sigma_mass = AHFhalo[curhalo_src].mass * 0.2;
@@ -531,8 +525,7 @@ int main (int argc, char** argv)
 	      block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim 
 		+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim
 		+ ((zb+kb+nsubperdim)%nsubperdim);
-	      
-	      // if(rank ==0)printf("block: %d\n",block);
+
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
@@ -545,7 +538,6 @@ int main (int argc, char** argv)
 		    + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
-		  // if(rank==0) printf("\t\tmerit:%f  %f %f target:%d/%d\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass,curhalo_tar,block);
 		  if(merit > maxmerit)
 		    {
 		      maxmeritid = curhalo_tar;
@@ -554,20 +546,30 @@ int main (int argc, char** argv)
 		  curhalo_tar = FOFhalo[curhalo_tar].nextid;
 		}
 	    }
-	  if(maxmerit > 0.)
+	  if(maxmerit > 0.005)
 	    {
-	     /* if(rank==0) printf("maxmerit:%f   m:%f D:%f,%f,%f V:%f,%f,%f\n",maxmerit,(FOFhalo[maxmeritid].mass-AHFhalo[curhalo_src].mass)/AHFhalo[curhalo_src].mass */
-	     /* 			 ,((FOFhalo[maxmeritid].pos[0] - AHFhalo[curhalo_src].pos[0])) */
-	     /* 			 ,((FOFhalo[maxmeritid].pos[1] - AHFhalo[curhalo_src].pos[1])) */
-	     /* 			 ,((FOFhalo[maxmeritid].pos[2] - AHFhalo[curhalo_src].pos[2])) */
-	     /* 			 ,((FOFhalo[maxmeritid].vel[0] - AHFhalo[curhalo_src].vel[0])) */
-	     /* 			 ,((FOFhalo[maxmeritid].vel[1] - AHFhalo[curhalo_src].vel[1])) */
-	     /* 			 ,((FOFhalo[maxmeritid].vel[2] - AHFhalo[curhalo_src].vel[2]))); */
-		  
+	      AHFhalo[curhalo_src].AHF2FOF = maxmeritid;	  
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
     }
+
+  for(i=firstsub;i<=lastsub;i++)
+    {    
+      curhalo_src = hocAHF[i];
+      while(curhalo_src > -1)
+	{
+	  ahf2fof = AHFhalo[curhalo_src].AHF2FOF;
+	  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
+	  if(curhalo_src != fof2ahf)
+	    {
+	      if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+	    }
+	  curhalo_src = AHFhalo[curhalo_src].nextid;
+	}
+    }
+
+
   free(hocFOF);
   free(hocAHF);
   free(AHFhalo);
