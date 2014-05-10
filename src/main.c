@@ -365,6 +365,7 @@ int64_t readmfofsnap(int filenr)
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(FOFhalo, sizeof(struct halostruct)*totalallhalos, MPI_BYTE, 0, MPI_COMM_WORLD);
   MPI_Barrier(MPI_COMM_WORLD);
+  free(aFOFhalo);
   return (int64_t) totalallhalos;
 }
 
