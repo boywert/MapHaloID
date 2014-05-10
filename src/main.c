@@ -410,7 +410,7 @@ int main (int argc, char** argv)
     {
       if(FOFhalo[ihalo].host == 0)
 	{
-	  printf("%d %f\n",(int)ihalo,FOFhalo[ihalo].mass);
+	  // printf("%d %f\n",(int)ihalo,FOFhalo[ihalo].mass);
 	  xb = FOFhalo[ihalo].pos[0]/subsize;
 	  yb = FOFhalo[ihalo].pos[1]/subsize;
 	  zb = FOFhalo[ihalo].pos[2]/subsize;
@@ -521,6 +521,7 @@ int main (int argc, char** argv)
 	  sigma_mass = AHFhalo[curhalo_src].mass*0.35;
 	  for(target_b=0;target_b<27;target_b++)
 	    {
+	      printf("Starting: AHF: %d\n",curhalo_src);
 	      ib = target_b/9 - 1;
 	      jb = (target_b - (ib+1)*9)/3 -1;
 	      kb = target_b - (ib+1)*9 - (jb+1)*3 -1;
@@ -542,7 +543,7 @@ int main (int argc, char** argv)
 		     ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
-		  if(rank==0) printf("\tmerit:%f  %f %f\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass);
+		  if(rank==0) printf("\t\tmerit:%f  %f %f\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass);
 		  if(merit > maxmerit)
 		    {
 		      maxmeritid = curhalo_tar;
