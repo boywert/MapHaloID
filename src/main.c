@@ -410,6 +410,7 @@ int main (int argc, char** argv)
     {
       if(FOFhalo[ihalo].host == 0)
 	{
+	  printf("%d %f\n",(int)ihalo,FOFhalo[ihalo].mass)
 	  xb = FOFhalo[ihalo].pos[0]/subsize;
 	  yb = FOFhalo[ihalo].pos[1]/subsize;
 	  zb = FOFhalo[ihalo].pos[2]/subsize;
