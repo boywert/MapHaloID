@@ -136,7 +136,7 @@ int64_t read_clueAHFhalos()
 		 );
 	  AHFhalo[currentHalo].host = ahfhalo.hostHalo;
 	  AHFhalo[currentHalo].nparts = ahfhalo.npart;
-	  AHFhalo[currentHalo].mass = AHFpmass*ahfhalo.npart;
+	  AHFhalo[currentHalo].mass = AHFpmass*(float)ahfhalo.npart;
 	  AHFhalo[currentHalo].pos[0] = ahfhalo.Xc;
 	  AHFhalo[currentHalo].pos[1] = ahfhalo.Yc;
 	  AHFhalo[currentHalo].pos[2] = ahfhalo.Zc;
@@ -312,11 +312,10 @@ int64_t readmfofsnap(int filenr)
 	    {
 	      cmvel[i] /= (double)nparts;
 	      cmpos[i] /= (double)nparts;
-	      
 	    }
 	  aFOFhalo[currentHalo].host = 0;
 	  aFOFhalo[currentHalo].nparts = nparts;
-	  aFOFhalo[currentHalo].mass = nparts*FOFpmass;
+	  aFOFhalo[currentHalo].mass = FOFpmass * (float)nparts;
 	  aFOFhalo[currentHalo].pos[0] = cmpos[0]*boxsize;
 	  aFOFhalo[currentHalo].pos[1] = cmpos[1]*boxsize;
 	  aFOFhalo[currentHalo].pos[2] = cmpos[2]*boxsize;
@@ -536,12 +535,12 @@ int main (int argc, char** argv)
 	      curhalo_tar = hocFOF[block];
 	      while(curhalo_tar > -1)
 		{
-		  merit =  ((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)*((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
+		  merit = ((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)*((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
 		    + ((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)*((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)
 		    + ((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos)*((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos)
-		    // + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
-		    // + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
-		    // + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
+		    + ((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel)*((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel)
+		    + ((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel)*((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel)
+		    + ((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel)*((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel)
 		    + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
