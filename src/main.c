@@ -545,7 +545,7 @@ int main (int argc, char** argv)
 		    // + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
 		  
 		  merit = exp(-1.*merit);
-		  if(rank==0) printf("\t\tmerit:%f  %f %f target:%d\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass,curhalo_tar);
+		  if(rank==0) printf("\t\tmerit:%f  %f %f target:%d/%d\n",merit,FOFhalo[curhalo_tar].mass,AHFhalo[curhalo_src].mass,curhalo_tar,block);
 		  if(merit > maxmerit)
 		    {
 		      maxmeritid = curhalo_tar;
