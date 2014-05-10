@@ -556,13 +556,13 @@ int main (int argc, char** argv)
 	    }
 	  if(maxmerit > 0.)
 	    {
-	      // if(rank==0) printf("maxmerit:%f   m:%f D:%f,%f,%f V:%f,%f,%f\n",maxmerit,(FOFhalo[maxmeritid].mass-AHFhalo[curhalo_src].mass)/AHFhalo[curhalo_src].mass
-				 ,((FOFhalo[maxmeritid].pos[0] - AHFhalo[curhalo_src].pos[0]))
-				 ,((FOFhalo[maxmeritid].pos[1] - AHFhalo[curhalo_src].pos[1]))
-				 ,((FOFhalo[maxmeritid].pos[2] - AHFhalo[curhalo_src].pos[2]))
-				 ,((FOFhalo[maxmeritid].vel[0] - AHFhalo[curhalo_src].vel[0]))
-				 ,((FOFhalo[maxmeritid].vel[1] - AHFhalo[curhalo_src].vel[1]))
-				 ,((FOFhalo[maxmeritid].vel[2] - AHFhalo[curhalo_src].vel[2])));
+	     /* if(rank==0) printf("maxmerit:%f   m:%f D:%f,%f,%f V:%f,%f,%f\n",maxmerit,(FOFhalo[maxmeritid].mass-AHFhalo[curhalo_src].mass)/AHFhalo[curhalo_src].mass */
+	     /* 			 ,((FOFhalo[maxmeritid].pos[0] - AHFhalo[curhalo_src].pos[0])) */
+	     /* 			 ,((FOFhalo[maxmeritid].pos[1] - AHFhalo[curhalo_src].pos[1])) */
+	     /* 			 ,((FOFhalo[maxmeritid].pos[2] - AHFhalo[curhalo_src].pos[2])) */
+	     /* 			 ,((FOFhalo[maxmeritid].vel[0] - AHFhalo[curhalo_src].vel[0])) */
+	     /* 			 ,((FOFhalo[maxmeritid].vel[1] - AHFhalo[curhalo_src].vel[1])) */
+	     /* 			 ,((FOFhalo[maxmeritid].vel[2] - AHFhalo[curhalo_src].vel[2]))); */
 		  
 	    }
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
