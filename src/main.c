@@ -223,7 +223,7 @@ int64_t readmfofsnap(int filenr)
       count = 0;
       while (pch != NULL)
 	{
-v	  count++;
+	  count++;
 	  if(count == 1) sprintf(ident,"%s",pch);
 	  if(count == 2) sprintf(equal, "%s", pch);
 	  if(count == 3) sprintf(value, "%s", pch);
