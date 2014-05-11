@@ -410,30 +410,6 @@ int main (int argc, char** argv)
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
   MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
 
-  rc = sqlite3_open(":memory:", &db);
-  sql = "CREATE TABLE FOFHALO("  \
-    "ID INT PRIMARY KEY     NOT NULL," \
-    "FOF2AHF        INT     NOT NULL);";
-  rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
-  sql = "INSERT INTO FOFHALO VALUES (0,100);";
-  rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
-  rc = sqlite3_prepare_v2(db, "SELECT * FROM FOFHALO", -1, &stmt, 0);
-  if (rc == SQLITE_OK) {
-    int nCols = sqlite3_column_count(stmt);
-    if (nCols)
-      {
-	for (int nCol = 0; nCol < nCols; nCol++)
-	  printf("%s\t", sqlite3_column_name(stmt, nCol));
-	printf("\n");
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	  for (int nCol = 0; nCol < nCols; nCol++)
-	    printf("%s\t", sqlite3_column_text(stmt, nCol));
-	printf("\n");
-      }
-    sqlite3_finalize(stmt);
-  }
-  sqlite3_close(db);
-  exit(-1);
 
   totalsub = nsubperdim*nsubperdim*nsubperdim;
   subsize = boxsize/nsubperdim;
@@ -665,8 +641,46 @@ int main (int argc, char** argv)
       rc = sqlite3_open(":memory:", &db);
       sql = "CREATE TABLE FOFHALO("  \
 	"ID INT PRIMARY KEY     NOT NULL," \
-	"FOF2AHF        INT     NOT NULL);";
+	"MAP        INT     NOT NULL);";
       rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+      sql = "CREATE TABLE AHFHALO("  \
+	"ID INT PRIMARY KEY     NOT NULL," \
+	"MAP        INT     NOT NULL);";
+      rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+
+      sql = "INSERT INTO FOFHALO VALUES (0,100);";
+      rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+
+      for(i=0;i<totalsub;i++)
+	{
+	  curhalo_src = hocAHF[i];
+	  while(curhalo_src > -1)
+	    {	    
+	      sprintf(sql,"INSERT INTO AHFHALO VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
+	      rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+	      curhalo_src = AHFhalo[curhalo_src].nextid;
+	    }
+	}      
+ 
+
+
+      rc = sqlite3_prepare_v2(db, "SELECT ID, MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0);
+      if (rc == SQLITE_OK) {
+	int nCols = sqlite3_column_count(stmt);
+	if (nCols)
+	  {
+	    for (int nCol = 0; nCol < nCols; nCol++)
+	      printf("%s\t", sqlite3_column_name(stmt, nCol));
+	    printf("\n");
+	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	      for (int nCol = 0; nCol < nCols; nCol++)
+		printf("%s\t", sqlite3_column_text(stmt, nCol));
+	    printf("\n");
+	  }
+	sqlite3_finalize(stmt);
+      }
+
+
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
@@ -678,10 +692,7 @@ int main (int argc, char** argv)
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
 		  if(curhalo_src != fof2ahf)
 		    {
-		      if(fof2ahf > -1)
-			{
-			  printf("%d %d %d %d\n",curhalo_src,ahf2fof,fof2ahf,AHFhalo[fof2ahf].AHF2FOF);
-			}
+
 		    }
 		}
 	      
