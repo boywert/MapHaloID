@@ -403,7 +403,7 @@ int main (int argc, char** argv)
   int *nhalospersub;
   sqlite3 *db;
   int rc;
-  char *sql;
+  char *sql,sql2[2048];
   char *ErrMsg = 0;
   sqlite3_stmt *stmt;
   MPI_Init (&argc, &argv);	/* starts MPI */
@@ -656,14 +656,13 @@ int main (int argc, char** argv)
 	  curhalo_src = hocAHF[i];
 	  while(curhalo_src > -1)
 	    {	    
-	      sprintf(sql,"INSERT INTO AHFHALO VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
-	      rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+	      sprintf(sql2,"INSERT INTO AHFHALO VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
+	      rc = sqlite3_exec(db, sql2, NULL, 0, &ErrMsg);
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}      
  
       exit(-1);
-
       rc = sqlite3_prepare_v2(db, "SELECT ID, MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0);
       if (rc == SQLITE_OK) {
 	int nCols = sqlite3_column_count(stmt);
