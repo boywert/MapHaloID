@@ -460,6 +460,7 @@ int main (int argc, char** argv)
       if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastfile);
       MPI_Barrier(MPI_COMM_WORLD);
     }
+  exit(0);
   /* FOF -> AHF */ 
   for(i=firstsub;i<=lastsub;i++)
     {
