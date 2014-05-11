@@ -15,16 +15,6 @@ const float FOFpmass = 287905.756504;
 const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
 
-
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-  int i;
-  for(i=0; i<argc; i++){
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
-}
-
 struct halostruct {
   uint64_t host;
   float mass;
@@ -414,6 +404,7 @@ int main (int argc, char** argv)
   int rc;
   char *sql;
   char *ErrMsg = 0;
+  sqlite3_stmt *stmt;
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
   MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
@@ -422,8 +413,24 @@ int main (int argc, char** argv)
   sql = "CREATE TABLE FOFHALO("  \
     "ID INT PRIMARY KEY     NOT NULL," \
     "FOF2AHF        INT     NOT NULL);";
-  rc = sqlite3_exec(db, sql, callback, 0, &ErrMsg);
-
+  rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+  sql = "INSERT INTO FOFHALO VALUES (0,100);";
+  rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
+  rc = sqlite3_prepare_v2(db, "SELECT * FROM FOFHALO", -1, &stmt, 0);
+  if (rc == SQLITE_OK) {
+    int nCols = sqlite3_column_count(stmt);
+    if (nCols)
+      {
+	for (int nCol = 0; nCol < nCols; nCol++)
+	  printf("%s\t", sqlite3_column_name(stmt, nCol));
+	printf("\n");
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	  for (int nCol = 0; nCol < nCols; nCol++)
+	    printf("%s\t", sqlite3_column_text(stmt, nCol));
+	printf("\n");
+      }
+    sqlite3_finalize(stmt);
+  }
   sqlite3_close(db);
   exit(-1);
 
@@ -658,7 +665,7 @@ int main (int argc, char** argv)
       sql = "CREATE TABLE FOFHALO("  \
 	"ID INT PRIMARY KEY     NOT NULL," \
 	"FOF2AHF        INT     NOT NULL);";
-      rc = sqlite3_exec(db, sql, callback, 0, &ErrMsg);
+      rc = sqlite3_exec(db, sql, NULL, 0, &ErrMsg);
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
