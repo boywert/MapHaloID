@@ -398,17 +398,24 @@ int main (int argc, char** argv)
   int *nhalospersub;
   sqlite3 *db;
   int rc;
-
+  char *sql;
+  char *ErrMsg = 0;
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
   MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
 
+  rc = sqlite3_open(":memory:", &db);
+  sql = "CREATE TABLE FOFHALO("  \
+    "ID INT PRIMARY KEY     NOT NULL," \
+    "FOF2AHF        INT     NOT NULL);";
+  rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+      
+  sqlite3_close(db);
+  exit(-1);
+
   totalsub = nsubperdim*nsubperdim*nsubperdim;
   subsize = boxsize/nsubperdim;
 
-  rc = sqlite3_open(":memory:", &db);
-  sqlite3_close(db);
-  exit(1);
   hocFOF = malloc(sizeof(int)*totalsub);
   hocAHF = malloc(sizeof(int)*totalsub);
   // nhalospersub = malloc(sizeof(int)*totalsub);
@@ -634,6 +641,10 @@ int main (int argc, char** argv)
   if(rank == 0)
     {
       rc = sqlite3_open(":memory:", &db);
+      sql = "CREATE TABLE FOFHALO("  \
+	"ID INT PRIMARY KEY     NOT NULL," \
+	"FOF2AHF        INT     NOT NULL);";
+      rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
@@ -655,7 +666,7 @@ int main (int argc, char** argv)
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}
-      qlite3_close(db);
+      sqlite3_close(db);
     }
 
   MPI_Barrier(MPI_COMM_WORLD);
