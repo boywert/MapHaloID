@@ -408,7 +408,7 @@ int main (int argc, char** argv)
   sql = "CREATE TABLE FOFHALO("  \
     "ID INT PRIMARY KEY     NOT NULL," \
     "FOF2AHF        INT     NOT NULL);";
-  rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+  rc = sqlite3_exec(db, sql, callback, 0, &ErrMsg);
       
   sqlite3_close(db);
   exit(-1);
@@ -644,7 +644,7 @@ int main (int argc, char** argv)
       sql = "CREATE TABLE FOFHALO("  \
 	"ID INT PRIMARY KEY     NOT NULL," \
 	"FOF2AHF        INT     NOT NULL);";
-      rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+      rc = sqlite3_exec(db, sql, callback, 0, &ErrMsg);
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
