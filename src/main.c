@@ -395,6 +395,7 @@ int main (int argc, char** argv)
   int ahf2fof, fof2ahf;
   int tag;
   MPI_Status status;
+  int *nhalospersub;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -405,11 +406,12 @@ int main (int argc, char** argv)
 
   hocFOF = malloc(sizeof(int)*totalsub);
   hocAHF = malloc(sizeof(int)*totalsub);
-
+  nhalospersub = malloc(sizeof(int)*totalsub);
   for(i=0;i<totalsub;i++)
     {
       hocFOF[i] = -1;
       hocAHF[i] = -1;
+      nhalospersub[i] = 0;
     }
 
   FOFhalo = malloc(0);
@@ -427,6 +429,7 @@ int main (int argc, char** argv)
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
       FOFhalo[ihalo].nextid = hocFOF[block];
       hocFOF[block] = ihalo;
+      nhalospersub[block]++;
   
     }
   MPI_Barrier(MPI_COMM_WORLD);
