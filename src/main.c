@@ -145,6 +145,8 @@ int64_t read_clueAHFhalos()
 	  AHFhalo[currentHalo].vel[0] = ahfhalo.VXc;
 	  AHFhalo[currentHalo].vel[1] = ahfhalo.VYc;
 	  AHFhalo[currentHalo].vel[2] = ahfhalo.VZc;
+	  AHFhalo[currentHalo].AHF2FOF = -1;
+	  AHFhalo[currentHalo].FOF2AHF = -1;
 	  AHFhalo[currentHalo].nextid = -1;
 	  // printf("%d %f %f %f\n",currentHalo,halo[currentHalo].pos[0],halo[currentHalo].pos[1],halo[currentHalo].pos[2]);
 	  if(currentHalo == maxhalo-1)
@@ -324,6 +326,8 @@ int64_t readmfofsnap(int filenr)
 	  aFOFhalo[currentHalo].vel[0] = cmvel[0];
 	  aFOFhalo[currentHalo].vel[1] = cmvel[1];
 	  aFOFhalo[currentHalo].vel[2] = cmvel[2];
+	  aFOFhalo[currentHalo].AHF2FOF = -1;
+	  aFOFhalo[currentHalo].FOF2AHF = -1;
 	  aFOFhalo[currentHalo].nextid = -1;
 	  
 	  // printf("%f %f %f\n",aFOFhalo[currentHalo].vel[0],aFOFhalo[currentHalo].vel[1],aFOFhalo[currentHalo].vel[2]);
