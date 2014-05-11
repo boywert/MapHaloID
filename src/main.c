@@ -223,7 +223,7 @@ int64_t readmfofsnap(int filenr)
       count = 0;
       while (pch != NULL)
 	{
-	  count++;
+v	  count++;
 	  if(count == 1) sprintf(ident,"%s",pch);
 	  if(count == 2) sprintf(equal, "%s", pch);
 	  if(count == 3) sprintf(value, "%s", pch);
@@ -419,7 +419,7 @@ int main (int argc, char** argv)
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
       
-      if(rank==0) printf("%d/%d: %d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF, (int)FOFhalo[ihalo].host, FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
+      // if(rank==0) printf("%d/%d: %d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF, (int)FOFhalo[ihalo].host, FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
       xb = FOFhalo[ihalo].pos[0]/subsize;
       yb = FOFhalo[ihalo].pos[1]/subsize;
       zb = FOFhalo[ihalo].pos[2]/subsize;
@@ -427,7 +427,7 @@ int main (int argc, char** argv)
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
       FOFhalo[ihalo].nextid = hocFOF[block];
       hocFOF[block] = ihalo;
-
+  
     }
   MPI_Barrier(MPI_COMM_WORLD);
   exit(1);
@@ -625,7 +625,7 @@ int main (int argc, char** argv)
 	}
     }
 
-
+  MPI_Barrier(MPI_COMM_WORLD);
   free(hocFOF);
   free(hocAHF);
   free(AHFhalo);
