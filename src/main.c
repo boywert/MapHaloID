@@ -454,7 +454,12 @@ int main (int argc, char** argv)
   firstsub = rank*blockA;
   lastsub = MIN(blockA*(rank+1)-1,totalsub-1);
 
-
+  for(i=0;i<size;i++)
+    {
+      
+      if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastfile);
+      MPI_Barrier(MPI_COMM_WORLD);
+    }
   /* FOF -> AHF */ 
   for(i=firstsub;i<=lastsub;i++)
     {
