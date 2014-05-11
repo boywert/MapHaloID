@@ -525,10 +525,6 @@ int main (int argc, char** argv)
 	    {
 	      FOFhalo[curhalo_src].FOF2AHF = -1;
 	    }
-	  if(FOFhalo[curhalo_src].FOF2AHF == 100000000)
-	    {
-	      printf("fof2ahf = %d\n",FOFhalo[curhalo_src].FOF2AHF);
-	    }
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
     }
@@ -602,15 +598,6 @@ int main (int argc, char** argv)
 	    {
 	      if(rank == 0)
 		{
-		  MPI_Recv(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, j, tag, MPI_COMM_WORLD, &status);
-		}
-	      if(rank == j)
-		{
-		  MPI_Send(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, 0, tag, MPI_COMM_WORLD);
-		}
-	      MPI_Barrier(MPI_COMM_WORLD);
-	      if(rank == 0)
-		{
 		  MPI_Recv(&(AHFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, j, tag, MPI_COMM_WORLD, &status);
 		}
 	      if(rank == j)
@@ -621,9 +608,23 @@ int main (int argc, char** argv)
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	  MPI_Barrier(MPI_COMM_WORLD);
+	  curhalo_src = hocFOF[i];
+	  while(curhalo_src > -1)
+	    {
+	      if(rank == 0)
+		{
+		  MPI_Recv(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, j, tag, MPI_COMM_WORLD, &status);
+		}
+	      if(rank == j)
+		{
+		  MPI_Send(&(FOFhalo[curhalo_src]), sizeof(struct halostruct), MPI_BYTE, 0, tag, MPI_COMM_WORLD);
+		}
+	      MPI_Barrier(MPI_COMM_WORLD);
+	      curhalo_src = FOFhalo[curhalo_src].nextid;
+	    }
 	}
+      MPI_Barrier(MPI_COMM_WORLD);
     }
-  exit(-1);
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank == 0)
     {
