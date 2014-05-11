@@ -457,7 +457,7 @@ int main (int argc, char** argv)
   for(i=0;i<size;i++)
     {
       
-      if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastfile);
+      if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastsub);
       MPI_Barrier(MPI_COMM_WORLD);
     }
   exit(0);
