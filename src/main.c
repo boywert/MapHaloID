@@ -418,17 +418,16 @@ int main (int argc, char** argv)
 
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
-      if(FOFhalo[ihalo].host == 0 )
-	{
-	  if(rank==0)printf("%d/%d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF,FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
-	  xb = FOFhalo[ihalo].pos[0]/subsize;
-	  yb = FOFhalo[ihalo].pos[1]/subsize;
-	  zb = FOFhalo[ihalo].pos[2]/subsize;
+ 
+      if(rank==0)printf("%d/%d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF,FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
+      xb = FOFhalo[ihalo].pos[0]/subsize;
+      yb = FOFhalo[ihalo].pos[1]/subsize;
+      zb = FOFhalo[ihalo].pos[2]/subsize;
       
-	  block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
-	  FOFhalo[ihalo].nextid = hocFOF[block];
-	  hocFOF[block] = ihalo;
-	}
+      block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
+      FOFhalo[ihalo].nextid = hocFOF[block];
+      hocFOF[block] = ihalo;
+
     }
 
   exit(0);
