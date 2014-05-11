@@ -525,6 +525,10 @@ int main (int argc, char** argv)
 	    {
 	      FOFhalo[curhalo_src].FOF2AHF = -1;
 	    }
+	  if(FOFhalo[curhalo_src] == 100000000)
+	    {
+	      printf()
+	    }
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
     }
@@ -619,6 +623,7 @@ int main (int argc, char** argv)
 	  MPI_Barrier(MPI_COMM_WORLD);
 	}
     }
+  exit(-1);
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank == 0)
     {
