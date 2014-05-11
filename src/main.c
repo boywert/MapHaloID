@@ -8,9 +8,23 @@
 #define  MIN(x,y)  ((x)<(y) ?(x):(y))
 
 int rank, size;
+
+
+
 const float FOFpmass = 287905.756504;
 const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
+
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+  int i;
+  for(i=0; i<argc; i++){
+    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+  }
+  printf("\n");
+  return 0;
+}
+
 struct halostruct {
   uint64_t host;
   float mass;
@@ -409,7 +423,7 @@ int main (int argc, char** argv)
     "ID INT PRIMARY KEY     NOT NULL," \
     "FOF2AHF        INT     NOT NULL);";
   rc = sqlite3_exec(db, sql, callback, 0, &ErrMsg);
-      
+
   sqlite3_close(db);
   exit(-1);
 
