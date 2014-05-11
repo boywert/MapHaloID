@@ -637,7 +637,7 @@ int main (int argc, char** argv)
 	      if(ahf2fof > -1)
 		{
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
-		  if(curhalo_src != fof2ahf)
+		  if(curhalo_src == fof2ahf)
 		    {
 		      if(fof2ahf > -1)
 			{
