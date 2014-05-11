@@ -406,12 +406,12 @@ int main (int argc, char** argv)
 
   hocFOF = malloc(sizeof(int)*totalsub);
   hocAHF = malloc(sizeof(int)*totalsub);
-  nhalospersub = malloc(sizeof(int)*totalsub);
+  // nhalospersub = malloc(sizeof(int)*totalsub);
   for(i=0;i<totalsub;i++)
     {
       hocFOF[i] = -1;
       hocAHF[i] = -1;
-      nhalospersub[i] = 0;
+      // nhalospersub[i] = 0;
     }
 
   FOFhalo = malloc(0);
@@ -429,15 +429,15 @@ int main (int argc, char** argv)
       block = xb*nsubperdim*nsubperdim + yb*nsubperdim + zb;
       FOFhalo[ihalo].nextid = hocFOF[block];
       hocFOF[block] = ihalo;
-      nhalospersub[block]++;
+      // nhalospersub[block]++;
     }
-  if(rank==0)
-    {
-      for(i=0;i<totalsub;i++)
-	{
-	  printf("%d: %d\n",i,nhalospersub[i]);
-	}
-    }
+  /* if(rank==0) */
+  /*   { */
+  /*     for(i=0;i<totalsub;i++) */
+  /* 	{ */
+  /* 	  printf("%d: %d\n",i,nhalospersub[i]); */
+  /* 	} */
+  /*   } */
   MPI_Barrier(MPI_COMM_WORLD);
 
   AHFhalo = malloc(0);
@@ -463,13 +463,14 @@ int main (int argc, char** argv)
   firstsub = rank*blockA;
   lastsub = MIN(blockA*(rank+1)-1,totalsub-1);
 
-  for(i=0;i<size;i++)
-    {
+  /* for(i=0;i<size;i++) */
+  /*   { */
       
-      if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastsub);
-      MPI_Barrier(MPI_COMM_WORLD);
-    }
-  exit(0);
+  /*     if(i==rank)printf("rank:%d  %d-%d\n",rank,firstsub,lastsub); */
+  /*     MPI_Barrier(MPI_COMM_WORLD); */
+  /*   } */
+  /* exit(0); */
+
   /* FOF -> AHF */ 
   for(i=firstsub;i<=lastsub;i++)
     {
