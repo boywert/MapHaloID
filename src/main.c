@@ -615,7 +615,7 @@ int main (int argc, char** argv)
 	      if(ahf2fof > -1)
 		{
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
-		  if(curhalo_src != fof2ahf)
+		  if(curhalo_src == fof2ahf)
 		    {
 		      if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
 		    }
