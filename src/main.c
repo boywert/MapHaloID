@@ -639,7 +639,10 @@ int main (int argc, char** argv)
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
 		  if(curhalo_src != fof2ahf)
 		    {
-		      if(rank==0)printf("%d %d %d\n",curhalo_src,ahf2fof,fof2ahf);
+		      if(fof2ahf > -1)
+			{
+			  printf("%d %d %d %d\n",curhalo_src,ahf2fof,fof2ahf,AHFhalo[fof2ahf].AHF2FOF);
+			}
 		    }
 		}
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
