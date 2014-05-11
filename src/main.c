@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <mpi.h>
 #include <math.h>
+#include <string.h>
 #include <sqlite3.h> 
 
 #define  MIN(x,y)  ((x)<(y) ?(x):(y))
