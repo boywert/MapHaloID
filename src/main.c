@@ -413,13 +413,13 @@ int main (int argc, char** argv)
     }
 
   FOFhalo = malloc(0);
-
+  MPI_Barrier(MPI_COMM_WORLD);
   nhaloFOF = readmfofsnap(filenr);
-
+  MPI_Barrier(MPI_COMM_WORLD);
   for(ihalo=0;ihalo<nhaloFOF;ihalo++)
     {
  
-      if(rank==0)printf("%d/%d: %d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF, (int)FOFhalo[ihalo].host, FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
+      if(rank==0) printf("%d/%d: %d %f %f %f %f\n",(int)ihalo,(int)nhaloFOF, (int)FOFhalo[ihalo].host, FOFhalo[ihalo].mass,FOFhalo[ihalo].pos[0],FOFhalo[ihalo].pos[1],FOFhalo[ihalo].pos[2]);
       xb = FOFhalo[ihalo].pos[0]/subsize;
       yb = FOFhalo[ihalo].pos[1]/subsize;
       zb = FOFhalo[ihalo].pos[2]/subsize;
