@@ -430,7 +430,7 @@ int main (int argc, char** argv)
   
     }
   MPI_Barrier(MPI_COMM_WORLD);
-  exit(1);
+
   AHFhalo = malloc(0);
 
   nhaloAHF = read_clueAHFhalos();
