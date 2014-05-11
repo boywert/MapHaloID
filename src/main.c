@@ -396,6 +396,8 @@ int main (int argc, char** argv)
   int tag;
   MPI_Status status;
   int *nhalospersub;
+  sqlite3 *db;
+  int rc;
 
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
@@ -404,6 +406,9 @@ int main (int argc, char** argv)
   totalsub = nsubperdim*nsubperdim*nsubperdim;
   subsize = boxsize/nsubperdim;
 
+  rc = sqlite3_open(":memory:", &db);
+  sqlite3_close(db);
+  exit(1);
   hocFOF = malloc(sizeof(int)*totalsub);
   hocAHF = malloc(sizeof(int)*totalsub);
   // nhalospersub = malloc(sizeof(int)*totalsub);
@@ -628,6 +633,7 @@ int main (int argc, char** argv)
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank == 0)
     {
+      rc = sqlite3_open(":memory:", &db);
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
@@ -637,7 +643,7 @@ int main (int argc, char** argv)
 	      if(ahf2fof > -1)
 		{
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
-		  if(curhalo_src == fof2ahf)
+		  if(curhalo_src != fof2ahf)
 		    {
 		      if(fof2ahf > -1)
 			{
@@ -645,9 +651,11 @@ int main (int argc, char** argv)
 			}
 		    }
 		}
+	      
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}
+      qlite3_close(db);
     }
 
   MPI_Barrier(MPI_COMM_WORLD);
