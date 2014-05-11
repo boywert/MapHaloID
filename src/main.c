@@ -430,7 +430,13 @@ int main (int argc, char** argv)
       FOFhalo[ihalo].nextid = hocFOF[block];
       hocFOF[block] = ihalo;
       nhalospersub[block]++;
-  
+    }
+  if(rank==0)
+    {
+      for(i=0;i<totalsub;i++)
+	{
+	  printf("%d: %d\n",i,nhalospersub[i]);
+	}
     }
   MPI_Barrier(MPI_COMM_WORLD);
 
