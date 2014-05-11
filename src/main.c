@@ -525,9 +525,9 @@ int main (int argc, char** argv)
 	    {
 	      FOFhalo[curhalo_src].FOF2AHF = -1;
 	    }
-	  if(FOFhalo[curhalo_src] == 100000000)
+	  if(FOFhalo[curhalo_src].FOF2AHF == 100000000)
 	    {
-	      printf()
+	      printf("fof2ahf = %d\n",FOFhalo[curhalo_src].FOF2AHF);
 	    }
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
