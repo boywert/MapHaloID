@@ -737,6 +737,10 @@ int main (int argc, char** argv)
 		      count2++;
 		    }
 		}
+	      else
+		{
+		  count1++;
+		}
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}
