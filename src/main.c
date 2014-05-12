@@ -16,7 +16,7 @@ const float FOFpmass = 287905.756504;
 const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
 const int nsubperdim = 64;
-
+const float threshold = 0.001;
 
 struct halostruct {
   uint64_t host;
@@ -425,7 +425,7 @@ void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
 	  curhalo_tar = FOFhalo[curhalo_tar].nextid;
 	}
     }
-  if(maxmerit > 0.005)
+  if(maxmerit > threshold)
     {
       AHFhalo[curhalo_src].AHF2FOF = maxmeritid;	  
     }
@@ -482,7 +482,7 @@ void FOF2AHFmap(int curhalo_src,int xb, int yb, int zb)
 	  curhalo_tar = AHFhalo[curhalo_tar].nextid;
 	}
     }
-  if(maxmerit > 0.005)
+  if(maxmerit > threshold)
     {
       FOFhalo[curhalo_src].FOF2AHF = maxmeritid;
     }
