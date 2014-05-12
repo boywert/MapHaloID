@@ -675,8 +675,8 @@ int main (int argc, char** argv)
 	    	for (int nCol = 0; nCol < nCols; nCol++)
 		  {
 		    printf("%s\t", sqlite3_column_text(stmt, nCol));
-		    printf("\n");
 		  }
+		printf("\n");
 	      }
 	    printf("\n");
 	  }
