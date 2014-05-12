@@ -75,7 +75,7 @@ struct AHFhalo {
   float   cNFW;
 };
 struct halostruct *AHFhalo,*FOFhalo;
-
+int *hocFOF,*hocAHF;
 int64_t read_clueAHFhalos()
 {
   char strbuffer[2048];
@@ -495,7 +495,6 @@ int main (int argc, char** argv)
 {
   int filenr=88;
   int64_t ihalo,nhaloFOF,nhaloAHF;
-  int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
   int i,j,ib,jb,kb,target_b;
   int totalsub;
