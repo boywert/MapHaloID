@@ -656,7 +656,7 @@ int main (int argc, char** argv)
 	  curhalo_src = hocAHF[i];
 	  while(curhalo_src > -1)
 	    {	    
-	      sprintf(sql2,"INSERT INTO AHFHALO VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
+	      sprintf(sql2,"INSERT INTO AHFHALO (ID,MAP) VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
 	      rc = sqlite3_exec(db, sql2, NULL, 0, &ErrMsg);
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
