@@ -391,6 +391,7 @@ void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
   int target_b,ib,jb,kb;
   int curhalo_tar;
   int block;
+  float dx,dy,dz,dm,dvx,dvy,dvz;
   sigma_pos = 100.0;
   sigma_vel = 50.0;
   sigma_mass = AHFhalo[curhalo_src].mass * 0.2;
@@ -408,13 +409,19 @@ void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
       curhalo_tar = hocFOF[block];
       while(curhalo_tar > -1)
 	{
-	  merit = ((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)*((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)
-	    + ((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)*((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)
-	    + ((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos)*((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos)
-	    + ((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel)*((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel)
-	    + ((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel)*((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel)
-	    + ((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel)*((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel)
-	    + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass);
+	  dx = fabs(FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0]);
+	  if(dx > boxsize/2.) dx = boxsize-dx;
+	  dy = fabs(FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1]);
+	  if(dy > boxsize/2.) dy = boxsize-dy;
+	  dz = fabs(FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2]);
+	  if(dz > boxsize/2.) dz = boxsize-dz;
+	  dvx = (FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0]);
+	  dvy = (FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1]);
+	  dvz = (FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2]);
+	  dm = FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass;
+	  merit = (dx*dx+dy*dy+dz*dz)/sigma_pos/sigma_pos
+	    + (dvx*dvx+dvy*dvy+dvz*dvz)/sigma_pos/sigma_vel/sigma_vel
+	    + dm*dm/sigma_mass/sigma_mass;
 		  
 	  merit = exp(-1.*merit);
 	  if(merit > maxmerit)
@@ -443,6 +450,8 @@ void FOF2AHFmap(int curhalo_src,int xb, int yb, int zb)
   int target_b,ib,jb,kb;
   int curhalo_tar;
   int block;
+  float dx,dy,dz,dm,dvx,dvy,dvz;
+
   sigma_pos = 100.0;
   sigma_vel = 50.0;
   sigma_mass = FOFhalo[curhalo_src].mass * 0.2;
@@ -465,13 +474,20 @@ void FOF2AHFmap(int curhalo_src,int xb, int yb, int zb)
       curhalo_tar = hocAHF[block];
       while(curhalo_tar > -1)
 	{
-	  merit = ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)
-	    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)
-	    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)
-	    + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)
-	    + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)
-	    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)
-	    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass);
+	  dx = fabs(FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0]);
+	  if(dx > boxsize/2.) dx = boxsize-dx;
+	  dy = fabs(FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1]);
+	  if(dy > boxsize/2.) dy = boxsize-dy;
+	  dz = fabs(FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2]);
+	  if(dz > boxsize/2.) dz = boxsize-dz;
+	  dvx = (FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0]);
+	  dvy = (FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1]);
+	  dvz = (FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2]);
+	  dm = FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass;
+
+	  merit = (dx*dx+dy*dy+dz*dz)/sigma_pos/sigma_pos
+	    + (dvx*dvx+dvy*dvy+dvz*dvz)/sigma_pos/sigma_vel/sigma_vel
+	    + dm*dm/sigma_mass/sigma_mass;
 		  
 	  merit = exp(-1.*merit);
 	  if(merit > maxmerit)
