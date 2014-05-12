@@ -656,7 +656,7 @@ int main (int argc, char** argv)
 	  curhalo_src = hocAHF[i];
 	  while(curhalo_src > -1)
 	    {	    
-	      sprintf(sql2,"INSERT INTO AHFHALO (ID,MAP) VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
+	      sprintf(sql2,"INSERT INTO AHFHALO VALUES (%d,%d);",curhalo_src,AHFhalo[curhalo_src].AHF2FOF);
 	      rc = sqlite3_exec(db, sql2, NULL, 0, &ErrMsg);
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
@@ -670,11 +670,11 @@ int main (int argc, char** argv)
 	    for (int nCol = 0; nCol < nCols; nCol++)
 	      printf("%s\t", sqlite3_column_name(stmt, nCol));
 	    printf("\n");
-	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	      {
-		for (int nCol = 0; nCol < nCols; nCol++)
-		  printf("%s\t", sqlite3_column_text(stmt, nCol));
-	      }
+	    /* while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) */
+	    /*   { */
+	    /* 	for (int nCol = 0; nCol < nCols; nCol++) */
+	    /* 	  printf("%s\t", sqlite3_column_text(stmt, nCol)); */
+	    /*   } */
 	    printf("\n");
 	  }
 	sqlite3_finalize(stmt);
