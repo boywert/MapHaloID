@@ -386,7 +386,7 @@ int64_t readmfofsnap(int filenr)
 void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
 {
   float sigma_pos,sigma_vel,sigma_mass;
-  float maxmerit;
+  float merit,maxmerit;
   int maxmeritid;
   int target_b,ib,jb,kb;
   int curhalo_tar;
@@ -438,7 +438,7 @@ void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
 void FOF2AHFmap(int curhalo_src,int xb, int yb, int zb)
 {
   float sigma_pos,sigma_vel,sigma_mass;
-  float maxmerit;
+  float merit,maxmerit;
   int maxmeritid;
   int target_b,ib,jb,kb;
   int curhalo_tar;
