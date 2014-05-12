@@ -670,11 +670,14 @@ int main (int argc, char** argv)
 	    for (int nCol = 0; nCol < nCols; nCol++)
 	      printf("%s\t", sqlite3_column_name(stmt, nCol));
 	    printf("\n");
-	    /* while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) */
-	    /*   { */
-	    /* 	for (int nCol = 0; nCol < nCols; nCol++) */
-	    /* 	  printf("%s\t", sqlite3_column_text(stmt, nCol)); */
-	    /*   } */
+	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	      {
+	    	for (int nCol = 0; nCol < nCols; nCol++)
+		  {
+		    printf("%s\t", sqlite3_column_text(stmt, nCol));
+		    printf("\n");
+		  }
+	      }
 	    printf("\n");
 	  }
 	sqlite3_finalize(stmt);
