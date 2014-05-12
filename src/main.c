@@ -16,7 +16,7 @@ const float FOFpmass = 287905.756504;
 const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
 const int nsubperdim = 64;
-const float threshold = 0.00005;
+const float threshold = 0.00000005;
 
 struct halostruct {
   uint64_t host;
