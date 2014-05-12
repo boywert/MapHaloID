@@ -15,6 +15,8 @@ int rank, size;
 const float FOFpmass = 287905.756504;
 const float AHFpmass = 2303246.05203;
 const float boxsize = 64000.; 
+const int nsubperdim = 64;
+
 
 struct halostruct {
   uint64_t host;
@@ -384,10 +386,11 @@ int64_t readmfofsnap(int filenr)
 void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
 {
   float sigma_pos,sigma_vel,sigma_mass;
-  flaot maxmerit;
+  float maxmerit;
   int maxmeritid;
   int target_b,ib,jb,kb;
   int curhalo_tar;
+  int block;
   sigma_pos = 100.0;
   sigma_vel = 50.0;
   sigma_mass = AHFhalo[curhalo_src].mass * 0.2;
@@ -435,10 +438,11 @@ void AHF2FOFmap(int curhalo_src, int xb, int yb, int zb)
 void FOF2AHFmap(int curhalo_src,int xb, int yb, int zb)
 {
   float sigma_pos,sigma_vel,sigma_mass;
-  flaot maxmerit;
+  float maxmerit;
   int maxmeritid;
   int target_b,ib,jb,kb;
   int curhalo_tar;
+  int block;
   sigma_pos = 100.0;
   sigma_vel = 50.0;
   sigma_mass = FOFhalo[curhalo_src].mass * 0.2;
@@ -494,7 +498,6 @@ int main (int argc, char** argv)
   int *hocFOF,*hocAHF;
   int block,xb,yb,zb;
   int i,j,ib,jb,kb,target_b;
-  int nsubperdim = 64;
   int totalsub;
   //   struct halostruct *FOFhalo,*AHFhalo;
   float subsize;
