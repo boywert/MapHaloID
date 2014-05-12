@@ -515,6 +515,7 @@ int main (int argc, char** argv)
   char *sql,sql2[2048];
   char *ErrMsg = 0;
   sqlite3_stmt *stmt;
+  int count1,count2;
   MPI_Init (&argc, &argv);	/* starts MPI */
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);	/* get current process id */
   MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
@@ -717,7 +718,7 @@ int main (int argc, char** argv)
       /* 	sqlite3_finalize(stmt); */
       /* } */
 
-
+      count1 = count2 = 0;
       for(i=0;i<totalsub;i++)
 	{
 	  curhalo_src = hocAHF[i];
@@ -729,13 +730,18 @@ int main (int argc, char** argv)
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
 		  if(curhalo_src != fof2ahf)
 		    {
-		      
+		      count1++;
+		    }
+		  else
+		    {
+		      count2++;
 		    }
 		}
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}
       sqlite3_close(db);
+      printf("bijection:%d/%d  none:%d/%d\n",count2,count2+count1,count1,count2+count1);
     }
 
   MPI_Barrier(MPI_COMM_WORLD);
