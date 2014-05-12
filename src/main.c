@@ -662,7 +662,7 @@ int main (int argc, char** argv)
 	    }
 	}      
  
-      rc = sqlite3_prepare_v2(db, "SELECT ID, MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0);
+      rc = sqlite3_prepare_v2(db, "SELECT MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0);
       if (rc == SQLITE_OK) {
 	int nCols = sqlite3_column_count(stmt);
 	if (nCols)
@@ -671,8 +671,10 @@ int main (int argc, char** argv)
 	      printf("%s\t", sqlite3_column_name(stmt, nCol));
 	    printf("\n");
 	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	      for (int nCol = 0; nCol < nCols; nCol++)
-		printf("%s\t", sqlite3_column_text(stmt, nCol));
+	      {
+		for (int nCol = 0; nCol < nCols; nCol++)
+		  printf("%s\t", sqlite3_column_text(stmt, nCol));
+	      }
 	    printf("\n");
 	  }
 	sqlite3_finalize(stmt);
