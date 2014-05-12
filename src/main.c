@@ -602,49 +602,6 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
   	{
 	  FOF2AHFmap(curhalo_src,xb,yb,zb);
-  	  /* sigma_pos = 100.0; */
-  	  /* sigma_vel = 50.0; */
-  	  /* sigma_mass = FOFhalo[curhalo_src].mass*0.2; */
-	  /* maxmerit = -1.; */
-  	  /* for(target_b=0;target_b<27;target_b++) */
-  	  /*   { */
-  	  /*     ib = target_b/9 - 1; */
-  	  /*     jb = (target_b - (ib+1)*9)/3 -1; */
-  	  /*     kb = target_b - (ib+1)*9 - (jb+1)*3 -1; */
-
-  	  /*     block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim */
-  	  /* 	+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim */
-  	  /* 	+ ((zb+kb+nsubperdim)%nsubperdim); */
-	      
-  	   
-  	  /*     curhalo_tar = hocAHF[block]; */
-  	  /*     while(curhalo_tar > -1) */
-  	  /* 	{ */
-  	  /* 	  merit = ((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos)*((FOFhalo[curhalo_src].pos[0] - AHFhalo[curhalo_tar].pos[0])/sigma_pos) */
-  	  /* 	    + ((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos)*((FOFhalo[curhalo_src].pos[1] - AHFhalo[curhalo_tar].pos[1])/sigma_pos) */
-  	  /* 	    + ((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos)*((FOFhalo[curhalo_src].pos[2] - AHFhalo[curhalo_tar].pos[2])/sigma_pos) */
-  	  /* 	    + ((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel)*((FOFhalo[curhalo_src].vel[0] - AHFhalo[curhalo_tar].vel[0])/sigma_vel) */
-  	  /* 	    + ((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel)*((FOFhalo[curhalo_src].vel[1] - AHFhalo[curhalo_tar].vel[1])/sigma_vel) */
-  	  /* 	    + ((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel)*((FOFhalo[curhalo_src].vel[2] - AHFhalo[curhalo_tar].vel[2])/sigma_vel) */
-  	  /* 	    + ((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass)*((FOFhalo[curhalo_src].mass - AHFhalo[curhalo_tar].mass)/sigma_mass); */
-		  
-  	  /* 	  merit = exp(-1.*merit); */
-  	  /* 	  if(merit > maxmerit) */
-  	  /* 	    { */
-  	  /* 	      maxmeritid = curhalo_tar; */
-  	  /* 	      maxmerit = merit; */
-  	  /* 	    } */
-  	  /* 	  curhalo_tar = AHFhalo[curhalo_tar].nextid; */
-  	  /* 	} */
-  	  /*   } */
-	  /* if(maxmerit > 0.005) */
-	  /*   { */
-	  /*     FOFhalo[curhalo_src].FOF2AHF = maxmeritid; */
-	  /*   } */
-	  /* else */
-	  /*   { */
-	  /*     FOFhalo[curhalo_src].FOF2AHF = -1; */
-	  /*   } */
   	  curhalo_src = FOFhalo[curhalo_src].nextid;
   	}
     }
@@ -660,48 +617,6 @@ int main (int argc, char** argv)
       while(curhalo_src > -1)
 	{
 	  AHF2FOFmap(curhalo_src,xb,yb,zb);
-	  /* sigma_pos = 100.0; */
-	  /* sigma_vel = 50.0; */
-	  /* sigma_mass = AHFhalo[curhalo_src].mass * 0.2; */
-	  /* maxmerit = -1.; */
-	  /* for(target_b=0;target_b<27;target_b++) */
-	  /*   { */
-	  /*     ib = target_b/9 - 1; */
-	  /*     jb = (target_b - (ib+1)*9)/3 -1; */
-	  /*     kb = target_b - (ib+1)*9 - (jb+1)*3 -1; */
-
-	  /*     block = ((xb+ib+nsubperdim)%nsubperdim)*nsubperdim*nsubperdim  */
-	  /* 	+ ((yb+jb+nsubperdim)%nsubperdim)*nsubperdim */
-	  /* 	+ ((zb+kb+nsubperdim)%nsubperdim); */
-
-	  /*     curhalo_tar = hocFOF[block]; */
-	  /*     while(curhalo_tar > -1) */
-	  /* 	{ */
-	  /* 	  merit = ((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos)*((FOFhalo[curhalo_tar].pos[0] - AHFhalo[curhalo_src].pos[0])/sigma_pos) */
-	  /* 	    + ((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos)*((FOFhalo[curhalo_tar].pos[1] - AHFhalo[curhalo_src].pos[1])/sigma_pos) */
-	  /* 	    + ((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos)*((FOFhalo[curhalo_tar].pos[2] - AHFhalo[curhalo_src].pos[2])/sigma_pos) */
-	  /* 	    + ((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel)*((FOFhalo[curhalo_tar].vel[0] - AHFhalo[curhalo_src].vel[0])/sigma_vel) */
-	  /* 	    + ((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel)*((FOFhalo[curhalo_tar].vel[1] - AHFhalo[curhalo_src].vel[1])/sigma_vel) */
-	  /* 	    + ((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel)*((FOFhalo[curhalo_tar].vel[2] - AHFhalo[curhalo_src].vel[2])/sigma_vel) */
-	  /* 	    + ((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass)*((FOFhalo[curhalo_tar].mass - AHFhalo[curhalo_src].mass)/sigma_mass); */
-		  
-	  /* 	  merit = exp(-1.*merit); */
-	  /* 	  if(merit > maxmerit) */
-	  /* 	    { */
-	  /* 	      maxmeritid = curhalo_tar; */
-	  /* 	      maxmerit = merit; */
-	  /* 	    } */
-	  /* 	  curhalo_tar = FOFhalo[curhalo_tar].nextid; */
-	  /* 	} */
-	  /*   } */
-	  /* if(maxmerit > 0.005) */
-	  /*   { */
-	  /*     AHFhalo[curhalo_src].AHF2FOF = maxmeritid;	   */
-	  /*   } */
-	  /* else */
-	  /*   { */
-	  /*     AHFhalo[curhalo_src].AHF2FOF = -1; */
-	  /*   } */
 	  curhalo_src = AHFhalo[curhalo_src].nextid;
 	}
     }
@@ -771,36 +686,36 @@ int main (int argc, char** argv)
 	    }
 	}      
  
-      for(i=0;i<totalsub;i++)
-	{
-	  curhalo_src = hocFOF[i];
-	  while(curhalo_src > -1)
-	    {	    
-	      sprintf(sql2,"INSERT INTO FOFHALO VALUES (%d,%d);",curhalo_src,FOFhalo[curhalo_src].FOF2AHF);
-	      rc = sqlite3_exec(db, sql2, NULL, 0, &ErrMsg);
-	      curhalo_src = FOFhalo[curhalo_src].nextid;
-	    }
-	}      
-      rc = sqlite3_prepare_v2(db, "SELECT ID, MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0);
-      if (rc == SQLITE_OK) {
-	int nCols = sqlite3_column_count(stmt);
-	if (nCols)
-	  {
-	    for (int nCol = 0; nCol < nCols; nCol++)
-	      printf("%s\t", sqlite3_column_name(stmt, nCol));
-	    printf("\n");
-	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	      {
-	    	for (int nCol = 0; nCol < nCols; nCol++)
-		  {
-		    printf("%s\t", sqlite3_column_text(stmt, nCol));
-		  }
-		printf("\n");
-	      }
-	    printf("\n");
-	  }
-	sqlite3_finalize(stmt);
-      }
+      /* for(i=0;i<totalsub;i++) */
+      /* 	{ */
+      /* 	  curhalo_src = hocFOF[i]; */
+      /* 	  while(curhalo_src > -1) */
+      /* 	    {	     */
+      /* 	      sprintf(sql2,"INSERT INTO FOFHALO VALUES (%d,%d);",curhalo_src,FOFhalo[curhalo_src].FOF2AHF); */
+      /* 	      rc = sqlite3_exec(db, sql2, NULL, 0, &ErrMsg); */
+      /* 	      curhalo_src = FOFhalo[curhalo_src].nextid; */
+      /* 	    } */
+      /* 	}       */
+      /* rc = sqlite3_prepare_v2(db, "SELECT ID, MAP, COUNT(MAP) AS Dups FROM AHFHALO GROUP BY MAP HAVING ( COUNT(MAP) > 1 )", -1, &stmt, 0); */
+      /* if (rc == SQLITE_OK) { */
+      /* 	int nCols = sqlite3_column_count(stmt); */
+      /* 	if (nCols) */
+      /* 	  { */
+      /* 	    for (int nCol = 0; nCol < nCols; nCol++) */
+      /* 	      printf("%s\t", sqlite3_column_name(stmt, nCol)); */
+      /* 	    printf("\n"); */
+      /* 	    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) */
+      /* 	      { */
+      /* 	    	for (int nCol = 0; nCol < nCols; nCol++) */
+      /* 		  { */
+      /* 		    printf("%s\t", sqlite3_column_text(stmt, nCol)); */
+      /* 		  } */
+      /* 		printf("\n"); */
+      /* 	      } */
+      /* 	    printf("\n"); */
+      /* 	  } */
+      /* 	sqlite3_finalize(stmt); */
+      /* } */
 
 
       for(i=0;i<totalsub;i++)
@@ -814,10 +729,9 @@ int main (int argc, char** argv)
 		  fof2ahf = FOFhalo[ahf2fof].FOF2AHF;
 		  if(curhalo_src != fof2ahf)
 		    {
-
+		      
 		    }
 		}
-	      
 	      curhalo_src = AHFhalo[curhalo_src].nextid;
 	    }
 	}
